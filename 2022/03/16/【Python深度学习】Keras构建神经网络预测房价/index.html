@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Keras构建神经网络预测房价 - Hexo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一：综述今天为大家介绍一个用Keras神经网络构建回归模型以预测房价的案例。
+这个案例中依赖的库有
+数据集来自 https://github.com/emanhamed/Houses-dataset,"> 
+    <meta name="author" content="Zeng Yue"> 
+    <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = "7471325035"</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Hexo</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">Keras构建神经网络预测房价</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('https://s1.328888.xyz/2022/06/04/WIr9R.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/深度学习"><b>「
+                    </b>深度学习<b> 」</b></a>
+                
+                March 16, 2022
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/03/16/%E3%80%90Python%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E3%80%91Keras%E6%9E%84%E5%BB%BA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E9%A2%84%E6%B5%8B%E6%88%BF%E4%BB%B7/" title="Keras构建神经网络预测房价" class="">Keras构建神经网络预测房价</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    10k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    9 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h3 id="一：综述"><a href="#一：综述" class="headerlink" title="一：综述"></a>一：综述</h3><h5 id="今天为大家介绍一个用Keras神经网络构建回归模型以预测房价的案例。"><a href="#今天为大家介绍一个用Keras神经网络构建回归模型以预测房价的案例。" class="headerlink" title="今天为大家介绍一个用Keras神经网络构建回归模型以预测房价的案例。"></a>今天为大家介绍一个用Keras神经网络构建回归模型以预测房价的案例。</h5><p><img src="http://files.mdnice.com/user/21987/0ecf1a9d-8e82-4d8b-b47e-469ba45cf750.jpg" alt="img"></p>
+<h5 id="这个案例中依赖的库有"><a href="#这个案例中依赖的库有" class="headerlink" title="这个案例中依赖的库有"></a>这个案例中依赖的库有</h5><p><img src="https://files.mdnice.com/user/21987/69f2900b-ab0e-4699-8b04-173e9607835a.jpg" alt="img"></p>
+<h5 id="数据集来自-https-github-com-emanhamed-Houses-dataset。该数据集包括csv文件以及图像。本文主要利用该数据集的csv文件部分来训练模型。"><a href="#数据集来自-https-github-com-emanhamed-Houses-dataset。该数据集包括csv文件以及图像。本文主要利用该数据集的csv文件部分来训练模型。" class="headerlink" title="数据集来自 https://github.com/emanhamed/Houses-dataset。该数据集包括csv文件以及图像。本文主要利用该数据集的csv文件部分来训练模型。"></a>数据集来自 <a target="_blank" rel="noopener" href="https://github.com/emanhamed/Houses-dataset%E3%80%82%E8%AF%A5%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8C%85%E6%8B%ACcsv%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E5%9B%BE%E5%83%8F%E3%80%82%E6%9C%AC%E6%96%87%E4%B8%BB%E8%A6%81%E5%88%A9%E7%94%A8%E8%AF%A5%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84csv%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86%E6%9D%A5%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E3%80%82">https://github.com/emanhamed/Houses-dataset。该数据集包括csv文件以及图像。本文主要利用该数据集的csv文件部分来训练模型。</a></h5><h5 id="我们先来看看数据集的样子"><a href="#我们先来看看数据集的样子" class="headerlink" title="我们先来看看数据集的样子"></a>我们先来看看数据集的样子</h5><pre><code class="python">cols = [&quot;bedrooms&quot;, &quot;bathrooms&quot;, &quot;area&quot;, &quot;zipcode&quot;, &quot;price&quot;]
+import pandas as pd
+df = pd.read_csv(&quot;E:\code\RegressionWithKeras\RegressionWithKeras\HousesDataset\HousesDataset\HousesInfo.txt&quot;, sep=&quot; &quot;, header=None, names=cols)
+</code></pre>
+<p><img src="https://files.mdnice.com/user/21987/61dbfe53-a399-40e2-8705-4a2812d69f51.jpg" alt="img"></p>
+<h5 id="包含五个列：房间数、浴室数、面积、邮政编码以及价格，其中价格是我们的目标列，其它则作为特征列。"><a href="#包含五个列：房间数、浴室数、面积、邮政编码以及价格，其中价格是我们的目标列，其它则作为特征列。" class="headerlink" title="包含五个列：房间数、浴室数、面积、邮政编码以及价格，其中价格是我们的目标列，其它则作为特征列。"></a>包含五个列：房间数、浴室数、面积、邮政编码以及价格，其中价格是我们的目标列，其它则作为特征列。</h5><h3 id="二：数据清洗"><a href="#二：数据清洗" class="headerlink" title="二：数据清洗"></a>二：数据清洗</h3><h5 id="在这个数据集中，有一些邮政编码对应的数据很少，是数据集的”噪声“，应该被去除。所以，编写一个函数，用以清洗数据集，代码如下："><a href="#在这个数据集中，有一些邮政编码对应的数据很少，是数据集的”噪声“，应该被去除。所以，编写一个函数，用以清洗数据集，代码如下：" class="headerlink" title="在这个数据集中，有一些邮政编码对应的数据很少，是数据集的”噪声“，应该被去除。所以，编写一个函数，用以清洗数据集，代码如下："></a>在这个数据集中，有一些邮政编码对应的数据很少，是数据集的”噪声“，应该被去除。所以，编写一个函数，用以清洗数据集，代码如下：</h5><pre><code class="python">def load_house_attributes(inputPath):
+    # 加载数据集
+    cols = [&quot;bedrooms&quot;, &quot;bathrooms&quot;, &quot;area&quot;, &quot;zipcode&quot;, &quot;price&quot;]
+    df = pd.read_csv(inputPath, sep=&quot; &quot;, header=None, names=cols)
+    # zipcodes是每个邮政编码的值
+    # counts则是每个邮政编码出现的次数
+    zipcodes = df[&quot;zipcode&quot;].value_counts().keys().tolist()
+    counts = df[&quot;zipcode&quot;].value_counts().tolist()
+    # 遍历它们的组合，找出小于阈值25的编码，把它们从df中删掉
+    for (zipcode, count) in zip(zipcodes, counts):
+        if count &lt; 25:
+            idxs = df[df[&quot;zipcode&quot;] == zipcode].index
+            df.drop(idxs, inplace=True)
+    return df
+</code></pre>
+<h5 id="这个函数接受数据集路径，统计数据集中邮政编码的出现次数，剔除出现次数小于25的数据，返回清洗后的dataframe，调用此函数"><a href="#这个函数接受数据集路径，统计数据集中邮政编码的出现次数，剔除出现次数小于25的数据，返回清洗后的dataframe，调用此函数" class="headerlink" title="这个函数接受数据集路径，统计数据集中邮政编码的出现次数，剔除出现次数小于25的数据，返回清洗后的dataframe，调用此函数"></a>这个函数接受数据集路径，统计数据集中邮政编码的出现次数，剔除出现次数小于25的数据，返回清洗后的dataframe，调用此函数</h5><pre><code class="python"># 设置数据集的路径，加载数据集
+print(&quot;[INFO] loading house attributes...&quot;)
+inputPath = &quot;./HousesDataset/HousesDataset/HousesInfo.txt&quot;
+df = datasets.load_house_attributes(inputPath)
+</code></pre>
+<h5 id="清洗后的数据如下所示："><a href="#清洗后的数据如下所示：" class="headerlink" title="清洗后的数据如下所示："></a>清洗后的数据如下所示：</h5><p><img src="https://files.mdnice.com/user/21987/af638f2f-33fe-42fd-8156-655bd00d75a0.jpg" alt="img"></p>
+<h5 id="可以看出，清洗后的数据index从30开始，剔除了一些数据。"><a href="#可以看出，清洗后的数据index从30开始，剔除了一些数据。" class="headerlink" title="可以看出，清洗后的数据index从30开始，剔除了一些数据。"></a>可以看出，清洗后的数据index从30开始，剔除了一些数据。</h5><h5 id="清洗完成后，我们来划分训练集和测试集，借助sklearn，很容易完成。"><a href="#清洗完成后，我们来划分训练集和测试集，借助sklearn，很容易完成。" class="headerlink" title="清洗完成后，我们来划分训练集和测试集，借助sklearn，很容易完成。"></a>清洗完成后，我们来划分训练集和测试集，借助sklearn，很容易完成。</h5><pre><code class="python">print(&quot;[INFO] constructing training/testing split...&quot;)
+(train, test) = train_test_split(df, test_size=0.25, random_state=42)
+</code></pre>
+<h3 id="三：特征工程"><a href="#三：特征工程" class="headerlink" title="三：特征工程"></a>三：特征工程</h3><h5 id="现在让我们把一些连续的数值特征作归一化处理，包括房间数、浴室数和面积，归一化处理能让我们训练的收敛速度更快。"><a href="#现在让我们把一些连续的数值特征作归一化处理，包括房间数、浴室数和面积，归一化处理能让我们训练的收敛速度更快。" class="headerlink" title="现在让我们把一些连续的数值特征作归一化处理，包括房间数、浴室数和面积，归一化处理能让我们训练的收敛速度更快。"></a>现在让我们把一些连续的数值特征作归一化处理，包括房间数、浴室数和面积，归一化处理能让我们训练的收敛速度更快。</h5><h5 id="连续特征处理完了，分类属性也要处理，一般我们就用one—hot编码对离散特征进行处理"><a href="#连续特征处理完了，分类属性也要处理，一般我们就用one—hot编码对离散特征进行处理" class="headerlink" title="连续特征处理完了，分类属性也要处理，一般我们就用one—hot编码对离散特征进行处理"></a>连续特征处理完了，分类属性也要处理，一般我们就用one—hot编码对离散特征进行处理</h5><h5 id="同样构造一个函数来完成。代码如下："><a href="#同样构造一个函数来完成。代码如下：" class="headerlink" title="同样构造一个函数来完成。代码如下："></a>同样构造一个函数来完成。代码如下：</h5><pre><code class="python">def process_house_attributes(df, train, test):
+    # 要处理的连续特征
+    continuous = [&quot;bedrooms&quot;, &quot;bathrooms&quot;, &quot;area&quot;]
+    # 通过MinMax转换器，把它们都变成0~1之间的数
+    cs = MinMaxScaler()
+    trainContinuous = cs.fit_transform(train[continuous])
+    testContinuous = cs.transform(test[continuous])
+    # 通过LabelBinarizer转换器，将邮政编码进行one-hot编码
+    zipBinarizer = LabelBinarizer().fit(df[&quot;zipcode&quot;])
+    trainCategorical = zipBinarizer.transform(train[&quot;zipcode&quot;])
+    testCategorical = zipBinarizer.transform(test[&quot;zipcode&quot;])
+    # 将处理后的特征拼接起来，构成训练集
+    trainX = np.hstack([trainCategorical, trainContinuous])
+    testX = np.hstack([testCategorical, testContinuous])
+    # return the concatenated training and testing data
+    return (trainX, testX)
+</code></pre>
+<h5 id="这个函数接收清洗后的dataframe以及划分好的训练集，测试集，通过对连续属性进行归一化、离散属性one-hot化，对特征进行进一步处理，最后返回训练特征数据集和测试特征数据集（相比原来剔除了目标列）。"><a href="#这个函数接收清洗后的dataframe以及划分好的训练集，测试集，通过对连续属性进行归一化、离散属性one-hot化，对特征进行进一步处理，最后返回训练特征数据集和测试特征数据集（相比原来剔除了目标列）。" class="headerlink" title="这个函数接收清洗后的dataframe以及划分好的训练集，测试集，通过对连续属性进行归一化、离散属性one-hot化，对特征进行进一步处理，最后返回训练特征数据集和测试特征数据集（相比原来剔除了目标列）。"></a>这个函数接收清洗后的dataframe以及划分好的训练集，测试集，通过对连续属性进行归一化、离散属性one-hot化，对特征进行进一步处理，最后返回训练特征数据集和测试特征数据集（相比原来剔除了目标列）。</h5><pre><code class="python"># 对特征列进行归一化和one—hot编码
+print(&quot;[INFO] processing data...&quot;)
+(trainX, testX) = datasets.process_house_attributes(df, train, test)
+</code></pre>
+<h5 id="因为目标列也是连续属性，所以也进行归一化处理"><a href="#因为目标列也是连续属性，所以也进行归一化处理" class="headerlink" title="因为目标列也是连续属性，所以也进行归一化处理"></a>因为目标列也是连续属性，所以也进行归一化处理</h5><pre><code class="python"># 对目标列也进行归一化
+maxPriceTrain = train[&quot;price&quot;].max()
+maxPriceTest = test[&quot;price&quot;].max()
+trainY = train[&quot;price&quot;] / maxPriceTrain
+testY = test[&quot;price&quot;] / maxPriceTrain
+</code></pre>
+<h3 id="四：模型建立"><a href="#四：模型建立" class="headerlink" title="四：模型建立"></a>四：模型建立</h3><h5 id="使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。"><a href="#使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。" class="headerlink" title="使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。"></a>使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。</h5><h5 id="如图所示："><a href="#如图所示：" class="headerlink" title="如图所示："></a>如图所示：</h5><p><img src="https://files.mdnice.com/user/21987/e7127cb1-275c-47d2-b991-41c065f5dd30.png" alt="img"></p>
+<h5 id="代码如下："><a href="#代码如下：" class="headerlink" title="代码如下："></a>代码如下：</h5><pre><code class="python">def create_mlp(dim, regress=False):
+ # 定义MLP神经网络
+ model = Sequential()
+ # 在网络上加两个层，一层节点为8，另一层节点为4，两层的激活函数都是relu
+ model.add(Dense(8, input_dim=dim, activation=&quot;relu&quot;))
+ model.add(Dense(4, activation=&quot;relu&quot;))
+ # 如果用于回归任务，再加一层（输出层），激活函数为linear
+ if regress:
+  model.add(Dense(1, activation=&quot;linear&quot;))
+ # 返回model
+ return model
+# 构建MLP模型
+model = models.create_mlp(trainX.shape[1], regress=True)
+# 其中opt包含了lr学习率，以及decay衰减率
+opt = Adam(lr=1e-3, decay=1e-3 / 200)
+# 设置损失函数为MAPE，并且传入opt，完成模型的构建
+model.compile(loss=&quot;mean_absolute_percentage_error&quot;, optimizer=opt)
+</code></pre>
+<h3 id="五：训练模型并预测"><a href="#五：训练模型并预测" class="headerlink" title="五：训练模型并预测"></a>五：训练模型并预测</h3><pre><code class="python"># 训练模型，训练2000轮，每一轮的用8个样本更新梯度（小批量梯度下降算法）
+print(&quot;[INFO] training model...&quot;)
+model.fit(x=trainX, y=trainY,
+ validation_data=(testX, testY),
+ epochs=2000, batch_size=8)
+# 在测试集上作预测
+print(&quot;[INFO] predicting house prices...&quot;)
+preds = model.predict(testX)
+# 计算误差、误差百分比、误差百分比的绝对值
+diff = preds.flatten() - testY
+percentDiff = (diff / testY) * 100
+absPercentDiff = np.abs(percentDiff)
+# 对误差百分比的绝对值求均值和标准差
+mean = np.mean(absPercentDiff)
+std = np.std(absPercentDiff)
+# 打印模型训练的相关指标
+locale.setlocale(locale.LC_ALL, &quot;en_US.UTF-8&quot;)
+print(&quot;[INFO] avg. house price: &#123;&#125;, std house price: &#123;&#125;&quot;.format(
+ locale.currency(df[&quot;price&quot;].mean(), grouping=True),
+ locale.currency(df[&quot;price&quot;].std(), grouping=True)))
+print(&quot;[INFO] mean: &#123;:.2f&#125;%, std: &#123;:.2f&#125;%&quot;.format(mean, std))
+</code></pre>
+<h5 id="运行结果如下："><a href="#运行结果如下：" class="headerlink" title="运行结果如下："></a>运行结果如下：</h5><p><img src="https://files.mdnice.com/user/21987/66e670cf-51e8-497d-b216-5690f8edb10e.jpg" alt="img"></p>
+<h3 id="六：进一步学习"><a href="#六：进一步学习" class="headerlink" title="六：进一步学习"></a>六：进一步学习</h3><h5 id="对MLP不熟悉的朋友们可以看B站UP主-3blue1Brown-出品的深度神经网络视频。"><a href="#对MLP不熟悉的朋友们可以看B站UP主-3blue1Brown-出品的深度神经网络视频。" class="headerlink" title="对MLP不熟悉的朋友们可以看B站UP主 3blue1Brown 出品的深度神经网络视频。"></a>对MLP不熟悉的朋友们可以看B站UP主 3blue1Brown 出品的深度神经网络视频。</h5><h5 id="关于Keras的更多知识以及api使用可以访问它的中文文档进行进一步的学习：https-keras-io-zh"><a href="#关于Keras的更多知识以及api使用可以访问它的中文文档进行进一步的学习：https-keras-io-zh" class="headerlink" title="关于Keras的更多知识以及api使用可以访问它的中文文档进行进一步的学习：https://keras.io/zh/"></a>关于Keras的更多知识以及api使用可以访问它的中文文档进行进一步的学习：<a target="_blank" rel="noopener" href="https://keras.io/zh/">https://keras.io/zh/</a></h5>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/GrantEtude.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s1.328888.xyz/2022/06/04/W7Vg3.jpg" height=300 width=300></img>
+                    <p>曾粤</p>
+                    <span>I think,therefore I am</span>
+                    <dl>
+                        
+                        
+                            
+                                <dd>
+                                    <link rel="stylesheet" type="text/css" href="">
+                                    <a href="function link() { [native code] }" target="_blank"><span
+                                    class=" iconfont "></span></a>
+                                </dd>
+                            
+                            
+                            
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">2 <p>Articles</p></a></li>
+                    <li><a href="/categories">2 <p>Categories</p></a></li>
+                    <li><a href="/tags">2 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%EF%BC%9A%E7%BB%BC%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">一：综述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97"><span class="toc-number">2.</span> <span class="toc-text">二：数据清洗</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%EF%BC%9A%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">三：特征工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%BB%BA%E7%AB%8B"><span class="toc-number">4.</span> <span class="toc-text">四：模型建立</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%EF%BC%9A%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E5%B9%B6%E9%A2%84%E6%B5%8B"><span class="toc-number">5.</span> <span class="toc-text">五：训练模型并预测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%EF%BC%9A%E8%BF%9B%E4%B8%80%E6%AD%A5%E5%AD%A6%E4%B9%A0"><span class="toc-number">6.</span> <span class="toc-text">六：进一步学习</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2022
+        <span class="gradient-text">
+            Zeng Yue
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.3" target="_blank" rel="noopener">v1.4.9.3</a></small>
+        
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['勇俭爱诚', '厚德博学，唯实求新'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>
