@@ -159,12 +159,12 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h3 id="一：综述"><a href="#一：综述" class="headerlink" title="一：综述"></a>一：综述</h3><h5 id="今天为大家介绍一个用Keras神经网络构建回归模型以预测房价的案例。"><a href="#今天为大家介绍一个用Keras神经网络构建回归模型以预测房价的案例。" class="headerlink" title="今天为大家介绍一个用Keras神经网络构建回归模型以预测房价的案例。"></a>今天为大家介绍一个用Keras神经网络构建回归模型以预测房价的案例。</h5><p><img src="http://files.mdnice.com/user/21987/0ecf1a9d-8e82-4d8b-b47e-469ba45cf750.jpg" alt="img"></p>
-<h5 id="这个案例中依赖的库有"><a href="#这个案例中依赖的库有" class="headerlink" title="这个案例中依赖的库有"></a>这个案例中依赖的库有</h5><p><img src="https://files.mdnice.com/user/21987/69f2900b-ab0e-4699-8b04-173e9607835a.jpg" alt="img"></p>
+<h5 id="这个案例中依赖的库有"><a href="#这个案例中依赖的库有" class="headerlink" title="这个案例中依赖的库有"></a>这个案例中依赖的库有</h5><p><img src="http://files.mdnice.com/user/21987/69f2900b-ab0e-4699-8b04-173e9607835a.jpg" alt="img"></p>
 <h5 id="数据集来自-https-github-com-emanhamed-Houses-dataset。该数据集包括csv文件以及图像。本文主要利用该数据集的csv文件部分来训练模型。"><a href="#数据集来自-https-github-com-emanhamed-Houses-dataset。该数据集包括csv文件以及图像。本文主要利用该数据集的csv文件部分来训练模型。" class="headerlink" title="数据集来自 https://github.com/emanhamed/Houses-dataset。该数据集包括csv文件以及图像。本文主要利用该数据集的csv文件部分来训练模型。"></a>数据集来自 <a target="_blank" rel="noopener" href="https://github.com/emanhamed/Houses-dataset%E3%80%82%E8%AF%A5%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8C%85%E6%8B%ACcsv%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E5%9B%BE%E5%83%8F%E3%80%82%E6%9C%AC%E6%96%87%E4%B8%BB%E8%A6%81%E5%88%A9%E7%94%A8%E8%AF%A5%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84csv%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86%E6%9D%A5%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E3%80%82">https://github.com/emanhamed/Houses-dataset。该数据集包括csv文件以及图像。本文主要利用该数据集的csv文件部分来训练模型。</a></h5><h5 id="我们先来看看数据集的样子"><a href="#我们先来看看数据集的样子" class="headerlink" title="我们先来看看数据集的样子"></a>我们先来看看数据集的样子</h5><pre><code class="python">cols = [&quot;bedrooms&quot;, &quot;bathrooms&quot;, &quot;area&quot;, &quot;zipcode&quot;, &quot;price&quot;]
 import pandas as pd
 df = pd.read_csv(&quot;E:\code\RegressionWithKeras\RegressionWithKeras\HousesDataset\HousesDataset\HousesInfo.txt&quot;, sep=&quot; &quot;, header=None, names=cols)
 </code></pre>
-<p><img src="https://files.mdnice.com/user/21987/61dbfe53-a399-40e2-8705-4a2812d69f51.jpg" alt="img"></p>
+<p><img src="http://files.mdnice.com/user/21987/61dbfe53-a399-40e2-8705-4a2812d69f51.jpg" alt="img"></p>
 <h5 id="包含五个列：房间数、浴室数、面积、邮政编码以及价格，其中价格是我们的目标列，其它则作为特征列。"><a href="#包含五个列：房间数、浴室数、面积、邮政编码以及价格，其中价格是我们的目标列，其它则作为特征列。" class="headerlink" title="包含五个列：房间数、浴室数、面积、邮政编码以及价格，其中价格是我们的目标列，其它则作为特征列。"></a>包含五个列：房间数、浴室数、面积、邮政编码以及价格，其中价格是我们的目标列，其它则作为特征列。</h5><h3 id="二：数据清洗"><a href="#二：数据清洗" class="headerlink" title="二：数据清洗"></a>二：数据清洗</h3><h5 id="在这个数据集中，有一些邮政编码对应的数据很少，是数据集的”噪声“，应该被去除。所以，编写一个函数，用以清洗数据集，代码如下："><a href="#在这个数据集中，有一些邮政编码对应的数据很少，是数据集的”噪声“，应该被去除。所以，编写一个函数，用以清洗数据集，代码如下：" class="headerlink" title="在这个数据集中，有一些邮政编码对应的数据很少，是数据集的”噪声“，应该被去除。所以，编写一个函数，用以清洗数据集，代码如下："></a>在这个数据集中，有一些邮政编码对应的数据很少，是数据集的”噪声“，应该被去除。所以，编写一个函数，用以清洗数据集，代码如下：</h5><pre><code class="python">def load_house_attributes(inputPath):
     # 加载数据集
     cols = [&quot;bedrooms&quot;, &quot;bathrooms&quot;, &quot;area&quot;, &quot;zipcode&quot;, &quot;price&quot;]
@@ -185,7 +185,7 @@ print(&quot;[INFO] loading house attributes...&quot;)
 inputPath = &quot;./HousesDataset/HousesDataset/HousesInfo.txt&quot;
 df = datasets.load_house_attributes(inputPath)
 </code></pre>
-<h5 id="清洗后的数据如下所示："><a href="#清洗后的数据如下所示：" class="headerlink" title="清洗后的数据如下所示："></a>清洗后的数据如下所示：</h5><p><img src="https://files.mdnice.com/user/21987/af638f2f-33fe-42fd-8156-655bd00d75a0.jpg" alt="img"></p>
+<h5 id="清洗后的数据如下所示："><a href="#清洗后的数据如下所示：" class="headerlink" title="清洗后的数据如下所示："></a>清洗后的数据如下所示：</h5><p><img src="http://files.mdnice.com/user/21987/af638f2f-33fe-42fd-8156-655bd00d75a0.jpg" alt="img"></p>
 <h5 id="可以看出，清洗后的数据index从30开始，剔除了一些数据。"><a href="#可以看出，清洗后的数据index从30开始，剔除了一些数据。" class="headerlink" title="可以看出，清洗后的数据index从30开始，剔除了一些数据。"></a>可以看出，清洗后的数据index从30开始，剔除了一些数据。</h5><h5 id="清洗完成后，我们来划分训练集和测试集，借助sklearn，很容易完成。"><a href="#清洗完成后，我们来划分训练集和测试集，借助sklearn，很容易完成。" class="headerlink" title="清洗完成后，我们来划分训练集和测试集，借助sklearn，很容易完成。"></a>清洗完成后，我们来划分训练集和测试集，借助sklearn，很容易完成。</h5><pre><code class="python">print(&quot;[INFO] constructing training/testing split...&quot;)
 (train, test) = train_test_split(df, test_size=0.25, random_state=42)
 </code></pre>
@@ -216,7 +216,7 @@ maxPriceTest = test[&quot;price&quot;].max()
 trainY = train[&quot;price&quot;] / maxPriceTrain
 testY = test[&quot;price&quot;] / maxPriceTrain
 </code></pre>
-<h3 id="四：模型建立"><a href="#四：模型建立" class="headerlink" title="四：模型建立"></a>四：模型建立</h3><h5 id="使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。"><a href="#使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。" class="headerlink" title="使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。"></a>使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。</h5><h5 id="如图所示："><a href="#如图所示：" class="headerlink" title="如图所示："></a>如图所示：</h5><p><img src="https://files.mdnice.com/user/21987/e7127cb1-275c-47d2-b991-41c065f5dd30.png" alt="img"></p>
+<h3 id="四：模型建立"><a href="#四：模型建立" class="headerlink" title="四：模型建立"></a>四：模型建立</h3><h5 id="使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。"><a href="#使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。" class="headerlink" title="使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。"></a>使用Keras构建多层感知机模型，也叫人工神经网络ANN。MLP适用于分类预测问题，输入一组数据，输出一个分类。它们也适用于回归预测问题，输入一组数据，输出一个连续值。</h5><h5 id="如图所示："><a href="#如图所示：" class="headerlink" title="如图所示："></a>如图所示：</h5><p><img src="http://files.mdnice.com/user/21987/e7127cb1-275c-47d2-b991-41c065f5dd30.png" alt="img"></p>
 <h5 id="代码如下："><a href="#代码如下：" class="headerlink" title="代码如下："></a>代码如下：</h5><pre><code class="python">def create_mlp(dim, regress=False):
  # 定义MLP神经网络
  model = Sequential()
@@ -257,7 +257,7 @@ print(&quot;[INFO] avg. house price: &#123;&#125;, std house price: &#123;&#125;
  locale.currency(df[&quot;price&quot;].std(), grouping=True)))
 print(&quot;[INFO] mean: &#123;:.2f&#125;%, std: &#123;:.2f&#125;%&quot;.format(mean, std))
 </code></pre>
-<h5 id="运行结果如下："><a href="#运行结果如下：" class="headerlink" title="运行结果如下："></a>运行结果如下：</h5><p><img src="https://files.mdnice.com/user/21987/66e670cf-51e8-497d-b216-5690f8edb10e.jpg" alt="img"></p>
+<h5 id="运行结果如下："><a href="#运行结果如下：" class="headerlink" title="运行结果如下："></a>运行结果如下：</h5><p><img src="http://files.mdnice.com/user/21987/66e670cf-51e8-497d-b216-5690f8edb10e.jpg" alt="img"></p>
 <h3 id="六：进一步学习"><a href="#六：进一步学习" class="headerlink" title="六：进一步学习"></a>六：进一步学习</h3><h5 id="对MLP不熟悉的朋友们可以看B站UP主-3blue1Brown-出品的深度神经网络视频。"><a href="#对MLP不熟悉的朋友们可以看B站UP主-3blue1Brown-出品的深度神经网络视频。" class="headerlink" title="对MLP不熟悉的朋友们可以看B站UP主 3blue1Brown 出品的深度神经网络视频。"></a>对MLP不熟悉的朋友们可以看B站UP主 3blue1Brown 出品的深度神经网络视频。</h5><h5 id="关于Keras的更多知识以及api使用可以访问它的中文文档进行进一步的学习：https-keras-io-zh"><a href="#关于Keras的更多知识以及api使用可以访问它的中文文档进行进一步的学习：https-keras-io-zh" class="headerlink" title="关于Keras的更多知识以及api使用可以访问它的中文文档进行进一步的学习：https://keras.io/zh/"></a>关于Keras的更多知识以及api使用可以访问它的中文文档进行进一步的学习：<a target="_blank" rel="noopener" href="https://keras.io/zh/">https://keras.io/zh/</a></h5>
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
