@@ -5,13 +5,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>支持向量机——从方程到代码 - Hexo</title>
+    <title>用pyecharts构建仪表板显示多图 - Hexo</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
-    <meta name="description" content="写在前面：  最近《机器学习》课程即将迎来期末考，就想借此机会把机器学习相关的知识系统梳理一遍。具体想法是将学过的算法自己推导一遍，然后将数学结论翻译为代码。
-  在此过程中，借鉴scikit-le,"> 
+    <meta name="description" content="学习完蚂蚁老师的pyecharts数据可视化课程后，受益匪浅！但是如何让pyecharts的图以自己想要的排版方式显示在网页上呢？就像这样看完这篇文章你就能学会！一：将你的生成pyecharts可视,"> 
     <meta name="author" content="Zeng Yue"> 
     <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -75,7 +74,7 @@
     <div class="navigation animated fadeIn fast delay-1s">
         <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
         <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
-        <h3 class="subtitle">支持向量机——从方程到代码</h3>
+        <h3 class="subtitle">用pyecharts构建仪表板显示多图</h3>
         <div class="social">
             <!--        <div class="like-icon">-->
             <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
@@ -105,25 +104,25 @@
         <div class="else">
             <p class="animated fadeInDown">
                 
-                <a href="/categories/机器学习"><b>「
-                    </b>机器学习<b> 」</b></a>
+                <a href="/categories/数据可视化"><b>「
+                    </b>数据可视化<b> 」</b></a>
                 
-                June 07, 2022
+                December 01, 2021
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2022/06/07/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E2%80%94%E2%80%94%E4%BB%8E%E6%96%B9%E7%A8%8B%E5%88%B0%E4%BB%A3%E7%A0%81/" title="支持向量机——从方程到代码" class="">支持向量机——从方程到代码</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/12/01/%E7%94%A8pyecharts%E6%9E%84%E5%BB%BA%E4%BB%AA%E8%A1%A8%E6%9D%BF%E6%98%BE%E7%A4%BA%E5%A4%9A%E5%9B%BE/" title="用pyecharts构建仪表板显示多图" class="">用pyecharts构建仪表板显示多图</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.6k
+                    3.3k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    8 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -136,7 +135,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" rel="tag">支持向量机</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/pyecharts/" rel="tag">pyecharts</a></li></ul>
             
         </div>
     </div>
@@ -157,189 +156,43 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h2 id="写在前面："><a href="#写在前面：" class="headerlink" title="写在前面："></a>写在前面：</h2><p>  最近《机器学习》课程即将迎来期末考，就想借此机会把机器学习相关的知识系统梳理一遍。具体想法是将学过的算法自己推导一遍，然后将数学结论翻译为代码。</p>
-<p>  在此过程中，借鉴<strong>scikit-learn</strong>的api设计，仿照其形式实现<strong>mykit-learn</strong>。全程只用<strong>numpy</strong>以及python自带的数据结构完成所有内容（在支持向量机部分还会用到<strong>cvxopt</strong>，用以求解二次优化问题）。</p>
-<p>  mykit-learn现在的代码结构分为：decomposition降维、cluster聚类、classification分类、Regression回归以及public公共。</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTITT.png" alt="zTITT.png"></p>
-<p>  目前，降维部分有MDS、PCA以及KernelPCA；聚类部分有KMeans以及KMeans++；分类有Softmax回归、逻辑回归、决策树、K近邻以及SVC（支持向量机分类）；回归有线性回归。public部分则是存放一些公用模块的地方，例如核函数。（目前在PCA和SVC中运用，共有五种）</p>
-<p>  接下来将本在博客不定期更新<strong>mykit-learn</strong>的内容，今天就从我认为最“美”的算法——支持向量机开始！</p>
-<h2 id="一：算法思想"><a href="#一：算法思想" class="headerlink" title="一：算法思想"></a>一：算法思想</h2><p><img src="https://s1.328888.xyz/2022/06/07/zTc07.jpg" alt="zTc07.jpg"></p>
-<p>说白了就是学习一个m-1维度的超平面，将两类样本分开</p>
-<p>以二维空间的例子来理解一下</p>
-<p>负类的样本就在红色区域内，正类的样本就在绿色区域内，以决策超平面为分界</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTmVX.png" alt="zTmVX.png"></p>
-<h2 id="二：数学推导"><a href="#二：数学推导" class="headerlink" title="二：数学推导"></a>二：数学推导</h2><p>为了更好的分类，容错率更大，我们就希望间隔尽量大</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zT3GZ.png" alt="zT3GZ.png"></p>
-<p>与此同时，我们关注一下约束条件</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTKtC.png" alt="zTKtC.png"></p>
-<p>加上约束条件后，再看看最终后的优化目标</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTax1.png" alt="zTax1.png"></p>
-<p>运用拉格朗日方程优化</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTOag.png" alt="zTOag.png"></p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTn4t.png" alt="zTn4t.png"></p>
-<p>最终可以推出如下结论</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zT1ce.png" alt="zT1ce.png"></p>
-<p>也就是传说中的KKT条件</p>
-<h2 id="三：对偶问题"><a href="#三：对偶问题" class="headerlink" title="三：对偶问题"></a>三：对偶问题</h2><p>为了进一步简化问题，引入原优化问题的对偶问题</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTbNO.png" alt="zTbNO.png"></p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTViq.png" alt="zTViq.png"></p>
-<p>由于原问题和对偶问题同解，所以我们可以通过求解对偶问题来获得原问题的解</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTViq.png" alt="zTViq.png"></p>
-<p>将之前求得的KKT条件代入对偶问题的方程中，化简得到如下式子</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTjVm.png" alt="zTjVm.png"></p>
-<p>结合KKT条件，问题最终化归为求解带等式及不等式约束的二次凸优化问题</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zT6gA.png" alt="zT6gA.png"></p>
-<p>例如：</p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zc09m.png" alt="zc09m.png"></p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcsWA.jpg" alt="zcsWA.jpg"></p>
-<p>这类问题，我稍后将用cvxopt来求解</p>
-<h2 id="四：核技巧"><a href="#四：核技巧" class="headerlink" title="四：核技巧"></a>四：核技巧</h2><p>如果样本点在原来的空间中，不能用决策超平面分开</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTMtS.png" alt="zTMtS.png"></p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcRUR.png" alt="zcRUR.png"></p>
-<p>那么我们就将原来的样本点升到更高的维度中，在高维空间中决策超平面就可以将它们分开</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTPSJ.png" alt="zTPSJ.png"></p>
-<p>但是吧，这个升维的函数很难找啊，就算找到了，在计算的过程也要付出存储高维数据的代价，所以就用核函数代替。</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zcQiF.png" alt="zcQiF.png"></p>
-<p>核函数其实就是高维空间的点积</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTNaR.png" alt="zTNaR.png"></p>
-<p>例如：</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zToQi.png" alt="zToQi.png"></p>
-<p>寄希望于维度转换函数是不可靠的，升六维时，转换函数还有表达式，但无穷维呢？如何表达呢？</p>
-<p>例如：</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTB4v.png" alt="zTB4v.png"></p>
-<p>但是，高斯核函数却可以表示无穷维（本质上是指数函数可以用泰勒公式展开成无穷项）</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTEc0.png" alt="zTEc0.png"></p>
-<p>说了那么多，让我们看看具体的程序代码吧</p>
-<h2 id="五：编程实践"><a href="#五：编程实践" class="headerlink" title="五：编程实践"></a>五：编程实践</h2><p> 依赖引入</p>
-<pre><code class="python">import numpy as np
-from cvxopt import matrix, solvers
-from numpy import ndarray
-from public.Kernel import Kernel
-
-# cvxopt设置解的精度，求解过程显示与否
-solvers.options[&#39;abstol&#39;] = 1e-12
-solvers.options[&#39;reltol&#39;] = 1e-10
-solvers.options[&#39;feastol&#39;] = 1e-10
-solvers.options[&#39;show_progress&#39;] = False
+            <h5 id="学习完蚂蚁老师的pyecharts数据可视化课程后，受益匪浅！"><a href="#学习完蚂蚁老师的pyecharts数据可视化课程后，受益匪浅！" class="headerlink" title="学习完蚂蚁老师的pyecharts数据可视化课程后，受益匪浅！"></a>学习完蚂蚁老师的pyecharts数据可视化课程后，受益匪浅！</h5><h6 id="但是如何让pyecharts的图以自己想要的排版方式显示在网页上呢？"><a href="#但是如何让pyecharts的图以自己想要的排版方式显示在网页上呢？" class="headerlink" title="但是如何让pyecharts的图以自己想要的排版方式显示在网页上呢？"></a>但是如何让pyecharts的图以自己想要的排版方式显示在网页上呢？</h6><h5 id="就像这样"><a href="#就像这样" class="headerlink" title="就像这样"></a>就像这样<img src="http://files.mdnice.com/user/21987/2d7ffa58-0a3c-42e2-ae40-9cbb11026ec1.png" alt="img"></h5><h5 id="看完这篇文章你就能学会！"><a href="#看完这篇文章你就能学会！" class="headerlink" title="看完这篇文章你就能学会！"></a>看完这篇文章你就能学会！</h5><h4 id="一：将你的生成pyecharts可视化图像的相关代码包装成一个函数。"><a href="#一：将你的生成pyecharts可视化图像的相关代码包装成一个函数。" class="headerlink" title="一：将你的生成pyecharts可视化图像的相关代码包装成一个函数。"></a>一：将你的生成pyecharts可视化图像的相关代码包装成一个函数。</h4><p>类似这样的结构</p>
+<pre><code>def func() -&gt; 图的对象名字
+  构造对象
+  return 对象
 </code></pre>
-<p>核函数模块</p>
-<pre><code class="python">import numpy as np
-from numpy import ndarray
-
-class Kernel:
-    def __init__(
-            self,
-            sigma: float = 1.0,
-            alpha: float = 1.0,
-            c: float = 1.0,
-            d: float = 1.0,
-            beta: float = 1.0,
-            theta: float = 1.0,
-    ):
-        self.theta = theta
-        self.beta = beta
-        self.d = d
-        self.c = c
-        self.alpha = alpha
-        self.sigma = sigma
-
-    def gauss(self, x: ndarray, y: ndarray) -&gt; float:
-        return np.exp(-np.sum((x - y) ** 2) / 2 * self.sigma ** 2)
-
-    def linear(self, x: ndarray, y: ndarray) -&gt; float:
-        return self.alpha * np.sum(x * y) + self.c
-
-    def poly(self, x: ndarray, y: ndarray) -&gt; float:
-        return self.linear(x, y) ** self.d
-
-    def sigmoid(self, x: ndarray, y: ndarray) -&gt; float:
-        return np.tanh(self.beta * np.sum(x * y) + self.theta)
-
-    def laplace(self, x: ndarray, y: ndarray) -&gt; float:
-        return np.exp(-np.sum(np.abs(x - y)) / self.sigma)
+<p>下面的代码是生成一个WordCloud词云的对象，并且返回这个对象。</p>
+<pre><code>def word_cloud() -&gt; WordCloud:
+ c = (
+  WordCloud()
+   .add(&quot;&quot;, word, word_size_range=[20, 100], shape=SymbolType.DIAMOND)
+   .set_global_opts(title_opts=opts.TitleOpts(title=&quot;快时尚行业销售排行&quot;))
+ )
+ return c
 </code></pre>
-<p>SVC类的初始化函数</p>
-<p>x: 训练数据 y: 标签 kernel: 核函数 w: 决策超平面的斜率数组 b: 决策超平面的截距 sigma: 高斯核与拉普拉斯核的参数 alpha: 线性核 多项式核的参数 c: 线性核 多项式核的参数 d: 多项式核的参数 beta: sigmoid的参数 theta: sigmoid参数</p>
-<pre><code class="python">class SVC:
-    def __init__(
-            self,
-            kernel: str = None,
-            sigma: float = 1.0,
-            alpha: float = 1.0,
-            c: float = 1.0,
-            d: float = 1.0,
-            beta: float = 1.0,
-            theta: float = 1.0,
-    ):
-        self.w = None
-        self.b = None
-        self.kernel = kernel
-        self.theta = theta
-        self.beta = beta
-        self.d = d
-        self.c = c
-        self.alpha = alpha
-        self.sigma = sigma
-        self.support_vector = None
+<h4 id="二：从-pyecharts-charts-导入-Page"><a href="#二：从-pyecharts-charts-导入-Page" class="headerlink" title="二：从 pyecharts.charts 导入 Page"></a>二：从 pyecharts.charts 导入 Page</h4><pre><code>from pyecharts.charts import Page
 </code></pre>
-<p>计算参数的函数</p>
-<p>这些参数包括了求解二次优化相关的参数</p>
-<p>其中的P,q,G,h,A,b的含义可以参考下图</p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcaJy.png" alt="zcaJy.png"></p>
-<pre><code class="python">    def __calculate_parameter(self, x: ndarray, y: ndarray):
-        kernel = Kernel(sigma=self.sigma, alpha=self.alpha, c=self.c, d=self.d, beta=self.beta, theta=self.theta)
-        kernel_func = &#123;
-            &quot;linear&quot;: kernel.linear,
-            &quot;poly&quot;: kernel.poly,
-            &quot;sigmoid&quot;: kernel.sigmoid,
-            &quot;laplace&quot;: kernel.laplace,
-            &quot;gauss&quot;: kernel.gauss,
-            None: np.dot
-        &#125;
-        m, _ = np.shape(x)
-        P = np.zeros((m, m))
-        for i in range(m):
-            for j in range(m):
-                P[i, j] = kernel_func.get(self.kernel, None)(x[i], x[j]) * y[i] * y[j]
-        P = matrix(P)
-        q = matrix(-np.ones(m))
-        G = matrix(np.diag(-np.ones(m)))
-        h = matrix(np.zeros(m))
-        A = matrix(y, (1, m), tc=&#39;d&#39;)
-        b = matrix([0.0])
-        res = solvers.qp(P, q, G, h, A, b)
-        λ = np.around(np.array(res[&#39;x&#39;]).flatten(), 2)
-        self.w = np.array(reduce(lambda a, b: a + b, map(lambda item: item[0] * item[1] * item[2], zip(λ, y, x))))
-        self.__support_index = [index for index, data in enumerate(λ) if data != 0]
+<p>写完画图的函数之后，加上这几行代码</p>
+<pre><code>page = Page(layout=Page.DraggablePageLayout, page_title=&quot;商户视角——行业分析&quot;)
+
+page.add(
+ word_cloud(),
+ bar_tool(),
+ scat(),
+ uVSz(),
+)
+
+page.render(&#39;商户视角——行业分析.html&#39;)
 </code></pre>
-<p>训练函数</p>
-<p>输入x（m*n）数据，y（1 * m）标签 （+1&#x2F;-1）</p>
-<p>训练得到决策超平面的斜率和截距</p>
-<pre><code class="python">    def fit(self, x: ndarray, y: ndarray):
-        self.__calculate_parameter(x, y)
-        self.support_vector = x[self.__support_index]
-        self.b = 1 / y[self.__support_index[0]] - np.dot(x[self.__support_index[0]], self.w)
+<h5 id="page-title的值你可以随便改"><a href="#page-title的值你可以随便改" class="headerlink" title="page_title的值你可以随便改"></a>page_title的值你可以随便改</h5><h5 id="page-add-里面填的就是你自己写的画图函数，按上面的格式添加进去"><a href="#page-add-里面填的就是你自己写的画图函数，按上面的格式添加进去" class="headerlink" title="page.add()里面填的就是你自己写的画图函数，按上面的格式添加进去"></a>page.add()里面填的就是你自己写的画图函数，按上面的格式添加进去</h5><h5 id="最后-page-render-‘XXXX-html’-这行代码之后过后会生成一个名叫XXXX的html文件"><a href="#最后-page-render-‘XXXX-html’-这行代码之后过后会生成一个名叫XXXX的html文件" class="headerlink" title="最后 page.render(‘XXXX.html’)  这行代码之后过后会生成一个名叫XXXX的html文件"></a>最后 page.render(‘XXXX.html’)  这行代码之后过后会生成一个名叫XXXX的html文件</h5><p>打开这个文件，里面就是仪表板的初始效果了 <img src="http://files.mdnice.com/user/21987/4a385972-4450-48f6-a63b-1030987eaf2d.png" alt="img"></p>
+<h4 id="三：根据你的意愿，对图片进行排版"><a href="#三：根据你的意愿，对图片进行排版" class="headerlink" title="三：根据你的意愿，对图片进行排版"></a>三：根据你的意愿，对图片进行排版</h4><p>你可以用鼠标点击图片拖拽，可以用滚轮缩放图像比例等等</p>
+<h4 id="四：保存你排版好的html文件"><a href="#四：保存你排版好的html文件" class="headerlink" title="四：保存你排版好的html文件"></a>四：保存你排版好的html文件</h4><p>点击<img src="http://files.mdnice.com/user/21987/ae0b4a93-4e99-4baf-ac69-65e607ee2259.jpg" alt="img"> 它就会自动生成一个json文件 <img src="https://files.mdnice.com/user/21987/9a6ab7d0-c613-423d-b3b4-05eae314d860.jpg" alt="img"> 把这个json文件放到你代码的目录下</p>
+<h4 id="五：形成自定义布局"><a href="#五：形成自定义布局" class="headerlink" title="五：形成自定义布局"></a>五：形成自定义布局</h4><pre><code>Page.save_resize_html(&quot;源.html&quot;, 
+ cfg_file=&quot;chart_config.json&quot;,
+  dest=&quot;自定义布局.html&quot;)
 </code></pre>
-<p>预测函数</p>
-<p>输入：待预测的数据</p>
-<p>输出：标签  +1或-1</p>
-<pre><code class="python">    def predict(self, data: ndarray):
-        return 1 if np.dot(data, self.w) + self.b &gt;= 0 else -1
-</code></pre>
-<h2 id="六：计算检验"><a href="#六：计算检验" class="headerlink" title="六：计算检验"></a>六：计算检验</h2><p>以老师PPT中的题目为例</p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcbeQ.jpg" alt="zcbeQ.jpg"></p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcVw4.jpg" alt="zcVw4.jpg"></p>
-<pre><code class="python">if __name__ == &quot;__main__&quot;:
-    svc = SVC()
-    svc.fit(np.array([[3, 3], [4, 3], [1, 1]]), np.array([1, 1, -1]))
-    print(&quot;决策超平面的斜率是：&quot;, svc.w)
-    print(&quot;决策超平面的截距为：&quot;, svc.b)
-    print(&quot;支持向量是：\n&quot;, svc.support_vector)
-    print(&quot;预测 (0.5, 0.5)的类别：&quot;, svc.predict(np.array([0.5, 0.5])))
-</code></pre>
-<p>结果如下，正确且非常直观</p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcFq3.png" alt="zcFq3.png"></p>
-<h2 id="七：完整代码"><a href="#七：完整代码" class="headerlink" title="七：完整代码"></a>七：完整代码</h2><p>放在我的GitHub了哦~</p>
+<p>执行上述代码，三个参数分别是，原先生成的html文件，保存布局产生的json文件以及你想要生成的自定义布局的html文件</p>
+<p>最后打开dest参数指定的html文件，你就会发现做好了一张由你布局的仪表板啦！</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -402,13 +255,6 @@ class Kernel:
             </div>
             
             
-            
-            <div class="box sticky animated fadeInRight faster">
-                <div id="toc" class="subbox">
-                    <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">写在前面：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%EF%BC%9A%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3"><span class="toc-number">2.</span> <span class="toc-text">一：算法思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%EF%BC%9A%E6%95%B0%E5%AD%A6%E6%8E%A8%E5%AF%BC"><span class="toc-number">3.</span> <span class="toc-text">二：数学推导</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%EF%BC%9A%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">三：对偶问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%EF%BC%9A%E6%A0%B8%E6%8A%80%E5%B7%A7"><span class="toc-number">5.</span> <span class="toc-text">四：核技巧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%EF%BC%9A%E7%BC%96%E7%A8%8B%E5%AE%9E%E8%B7%B5"><span class="toc-number">6.</span> <span class="toc-text">五：编程实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%A3%80%E9%AA%8C"><span class="toc-number">7.</span> <span class="toc-text">六：计算检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%EF%BC%9A%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">8.</span> <span class="toc-text">七：完整代码</span></a></li></ol>
-                </div>
-            </div>
             
             
         </div>

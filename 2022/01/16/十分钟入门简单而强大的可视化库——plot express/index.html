@@ -1,0 +1,714 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>十分钟入门简单而强大的可视化库 - Hexo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="在python的世界里，用于可视化分析的库有很多，有最原始的matplotlib，还有更加简单好用的serborn（对matplotlib进行封装），而pyecharts则是以动态、可交互的特点吸引,"> 
+    <meta name="author" content="Zeng Yue"> 
+    <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = "7471325035"</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Hexo</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">十分钟入门简单而强大的可视化库</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('https://s1.328888.xyz/2022/06/04/WIr9R.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/数据可视化"><b>「
+                    </b>数据可视化<b> 」</b></a>
+                
+                January 16, 2022
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/01/16/%E5%8D%81%E5%88%86%E9%92%9F%E5%85%A5%E9%97%A8%E7%AE%80%E5%8D%95%E8%80%8C%E5%BC%BA%E5%A4%A7%E7%9A%84%E5%8F%AF%E8%A7%86%E5%8C%96%E5%BA%93%E2%80%94%E2%80%94plot%20express/" title="十分钟入门简单而强大的可视化库" class="">十分钟入门简单而强大的可视化库</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    15k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    13 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/plot-express/" rel="tag">plot express</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h5 id="在python的世界里，用于可视化分析的库有很多，有最原始的matplotlib，还有更加简单好用的serborn（对matplotlib进行封装），而pyecharts则是以动态、可交互的特点吸引着众人。"><a href="#在python的世界里，用于可视化分析的库有很多，有最原始的matplotlib，还有更加简单好用的serborn（对matplotlib进行封装），而pyecharts则是以动态、可交互的特点吸引着众人。" class="headerlink" title="在python的世界里，用于可视化分析的库有很多，有最原始的matplotlib，还有更加简单好用的serborn（对matplotlib进行封装），而pyecharts则是以动态、可交互的特点吸引着众人。"></a>在python的世界里，用于可视化分析的库有很多，有最原始的matplotlib，还有更加简单好用的serborn（对matplotlib进行封装），而pyecharts则是以动态、可交互的特点吸引着众人。</h5><h5 id="今天为大家介绍一个兼具pyecharts的动态性和serborn的简便性与一体的可视化库——plotly-express"><a href="#今天为大家介绍一个兼具pyecharts的动态性和serborn的简便性与一体的可视化库——plotly-express" class="headerlink" title="今天为大家介绍一个兼具pyecharts的动态性和serborn的简便性与一体的可视化库——plotly express"></a>今天为大家介绍一个兼具pyecharts的动态性和serborn的简便性与一体的可视化库——plotly express</h5><h5 id="让我们对比一下pyecharts与plotly-express完成桑基图的步骤"><a href="#让我们对比一下pyecharts与plotly-express完成桑基图的步骤" class="headerlink" title="让我们对比一下pyecharts与plotly express完成桑基图的步骤"></a>让我们对比一下pyecharts与plotly express完成桑基图的步骤</h5><h5 id="首先看pyecharts，由于其需要苛刻的数据结构，所以需要花费大量的精力用于数据处理。"><a href="#首先看pyecharts，由于其需要苛刻的数据结构，所以需要花费大量的精力用于数据处理。" class="headerlink" title="首先看pyecharts，由于其需要苛刻的数据结构，所以需要花费大量的精力用于数据处理。"></a>首先看pyecharts，由于其需要苛刻的数据结构，所以需要花费大量的精力用于数据处理。</h5><p><img src="http://files.mdnice.com/user/21987/f3d6d980-e028-43a7-bdb7-9fd79c75193b.png" alt="img"></p>
+<h5 id="然后我们看plotly-express，简简单单几行代码就实现了类似的效果，可以节省大量的时间精力，提升工作效率！"><a href="#然后我们看plotly-express，简简单单几行代码就实现了类似的效果，可以节省大量的时间精力，提升工作效率！" class="headerlink" title="然后我们看plotly express，简简单单几行代码就实现了类似的效果，可以节省大量的时间精力，提升工作效率！"></a>然后我们看plotly express，简简单单几行代码就实现了类似的效果，可以节省大量的时间精力，提升工作效率！</h5><p><img src="http://files.mdnice.com/user/21987/0a161e0c-359e-494f-82a1-6e653f079dc5.jpg" alt="img"> <img src="https://files.mdnice.com/user/21987/0225e76a-cbce-4ffa-862c-98c24bbd94af.jpg" alt="img"></p>
+<h5 id="接下来我们就来学习plotly-express的使用方法吧！"><a href="#接下来我们就来学习plotly-express的使用方法吧！" class="headerlink" title="接下来我们就来学习plotly express的使用方法吧！"></a>接下来我们就来学习plotly express的使用方法吧！</h5><h5 id="首先导入我们的可视化库-加载数据集，并且查看数据集的结构"><a href="#首先导入我们的可视化库-加载数据集，并且查看数据集的结构" class="headerlink" title="首先导入我们的可视化库,加载数据集，并且查看数据集的结构"></a>首先导入我们的可视化库,加载数据集，并且查看数据集的结构</h5><pre><code>import pandas as pd
+import numpy as np
+import plotly.express as px
+# 数据集
+gapminder = px.data.gapminder()
+gapminder.head(10)
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/e1b5a299-b5b0-47e7-b5f1-f9fec9e41e4e.jpg" alt="img"></p>
+<h5 id="线图：用year列作为x轴，lifeExp为y轴，以continent列的不同值作颜色区分，线条的数量就是country数量。"><a href="#线图：用year列作为x轴，lifeExp为y轴，以continent列的不同值作颜色区分，线条的数量就是country数量。" class="headerlink" title="线图：用year列作为x轴，lifeExp为y轴，以continent列的不同值作颜色区分，线条的数量就是country数量。"></a>线图：用year列作为x轴，lifeExp为y轴，以continent列的不同值作颜色区分，线条的数量就是country数量。</h5><pre><code># line 图
+fig = px.line(
+  gapminder,  # 数据集
+  x=&quot;year&quot;,  # 横坐标
+  y=&quot;lifeExp&quot;,  # 纵坐标
+  color=&quot;continent&quot;,  # 颜色的数据
+  line_group=&quot;continent&quot;,  # 线性分组
+  hover_name=&quot;country&quot;,   # 悬停hover的数据
+  line_shape=&quot;spline&quot;,  # 线的形状
+  render_mode=&quot;svg&quot;  # 生成的图片模式
+)
+fig.show()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/d43e815c-27a4-48a4-bf09-33a36840b09b.jpg" alt="img"></p>
+<h5 id="因为国家的数量太多了，所以线条很多，有点乱，可以点击图例隐藏一些数据以更好展现图表"><a href="#因为国家的数量太多了，所以线条很多，有点乱，可以点击图例隐藏一些数据以更好展现图表" class="headerlink" title="因为国家的数量太多了，所以线条很多，有点乱，可以点击图例隐藏一些数据以更好展现图表"></a>因为国家的数量太多了，所以线条很多，有点乱，可以点击图例隐藏一些数据以更好展现图表</h5><h5 id="面积图"><a href="#面积图" class="headerlink" title="面积图"></a>面积图</h5><pre><code># area 图
+fig = px.area(
+  gapminder,  # 数据集
+  x=&quot;year&quot;,  # 横坐标
+  y=&quot;pop&quot;,  # 纵坐标
+  color=&quot;continent&quot;,   # 颜色
+  line_group=&quot;country&quot;  # 线性组别
+)
+fig.show()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/d86cea0e-1914-4de9-a360-362364b9e63f.jpg" alt="img"></p>
+<h5 id="散点图"><a href="#散点图" class="headerlink" title="散点图"></a>散点图</h5><pre><code># 散点图
+px.scatter(
+  gapminder   # 绘图DataFrame数据集
+  ,x=&quot;gdpPercap&quot;  # 横坐标
+  ,y=&quot;lifeExp&quot;  # 纵坐标
+  ,color=&quot;continent&quot;  # 区分颜色
+  ,size=&quot;pop&quot;   # 区分圆的大小
+  ,size_max=60  # 散点大小
+)
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/3a24e9bf-e894-42f6-b1f8-d2c50bb213a2.jpg" alt="img"></p>
+<pre><code>px.scatter(
+  gapminder   # 绘图使用的数据
+  ,x=&quot;gdpPercap&quot; # 横纵坐标使用的数据
+  ,y=&quot;lifeExp&quot;  # 纵坐标数据
+  ,color=&quot;continent&quot;  # 区分颜色的属性
+  ,size=&quot;pop&quot;   # 区分圆的大小
+  ,size_max=60  # 圆的最大值
+  ,hover_name=&quot;country&quot;  # 图中可视化最上面的名字
+  ,animation_frame=&quot;year&quot;  # 横轴滚动栏的属性year
+  ,animation_group=&quot;country&quot;  # 标注的分组
+  ,facet_col=&quot;continent&quot;   # 按照国家country属性进行分格显示
+  ,log_x=True  # 横坐标表取对数
+  ,range_x=[100,100000]  # 横轴取值范围
+  ,range_y=[25,90]  # 纵轴范围
+  ,labels=dict(pop=&quot;Populations&quot;,  # 属性名字的变化，更直观
+               gdpPercap=&quot;GDP per Capital&quot;,
+               lifeExp=&quot;Life Expectancy&quot;)
+)
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/33eb49a6-1ff5-4469-a118-f5de47fb42a7.jpg" alt="img"></p>
+<h5 id="地理图"><a href="#地理图" class="headerlink" title="地理图"></a>地理图</h5><pre><code># 地理图
+px.choropleth(
+  gapminder,  # 数据集
+  locations=&quot;iso_alpha&quot;,  # 配合颜色color显示
+  color=&quot;lifeExp&quot;, # 颜色的字段选择
+  hover_name=&quot;country&quot;,  # 悬停字段名字
+  animation_frame=&quot;year&quot;,  # 注释
+  color_continuous_scale=px.colors.sequential.Plasma,  # 颜色变化
+  projection=&quot;natural earth&quot;  # 全球地图
+             )
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/7b47b551-aae1-4859-a39e-a1418ac1e072.jpg" alt="img"></p>
+<pre><code>fig = px.scatter_geo(
+  gapminder,   # 数据
+  locations=&quot;iso_alpha&quot;,  # 配合颜色color显示
+  color=&quot;continent&quot;, # 颜色
+  hover_name=&quot;country&quot;, # 悬停数据
+  size=&quot;pop&quot;,  # 大小
+  animation_frame=&quot;year&quot;,  # 数据帧的选择
+  projection=&quot;natural earth&quot;  # 全球地图
+                    )
+
+fig.show()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/f4b9cff7-f791-4e5d-9d2f-0a0306c22285.jpg" alt="img"></p>
+<pre><code>fig = px.line_geo(
+  gapminder,  # 数据集
+  locations=&quot;iso_alpha&quot;,  # 配合和color显示数据
+  color=&quot;continent&quot;,  # 颜色
+  projection=&quot;orthographic&quot;)   # 球形的地图
+fig.show()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/e5a0d0e6-ba01-4830-b5ca-a2bca5ea3b45.jpg" alt="img"></p>
+<h5 id="接下来换上大名鼎鼎内置的鸢尾花数据集"><a href="#接下来换上大名鼎鼎内置的鸢尾花数据集" class="headerlink" title="接下来换上大名鼎鼎内置的鸢尾花数据集"></a>接下来换上大名鼎鼎内置的鸢尾花数据集</h5><pre><code># iris数据集
+iris = px.data.iris()
+iris.head(10)
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/5a2ddf15-7ff4-447b-a8ea-131c2b0fd518.jpg" alt="img"></p>
+<h5 id="继续探索散点图"><a href="#继续探索散点图" class="headerlink" title="继续探索散点图"></a>继续探索散点图</h5><pre><code># 选择两个属性作为横纵坐标来绘制散点图
+fig = px.scatter(
+  iris,  # 数据集
+  x=&quot;sepal_width&quot;,  # 横坐标
+  y=&quot;sepal_length&quot;,# 纵坐标
+  color=&quot;species&quot;    
+                )
+fig.show()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/93e9db65-0c77-4463-a472-a43cf84bc14d.jpg" alt="img"></p>
+<pre><code>px.scatter(
+  iris,  # 数据集
+  x=&quot;sepal_width&quot;, # 横坐标
+  y=&quot;sepal_length&quot;,  # 纵坐标
+  color=&quot;species&quot;,  # 颜色
+  marginal_x=&quot;histogram&quot;,  # 横坐标直方图
+  marginal_y=&quot;rug&quot;   # 细条图
+)
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/d07940be-3ceb-4297-824b-b70deb600023.jpg" alt="img"></p>
+<pre><code>px.scatter(
+  iris,  # 数据集
+  x=&quot;sepal_width&quot;,  # 横坐标
+  y=&quot;sepal_length&quot;,  # 纵坐标
+  color=&quot;species&quot;,  # 颜色
+  marginal_y=&quot;violin&quot;,  # 纵坐标小提琴图
+  marginal_x=&quot;box&quot;,  # 横坐标箱型图
+  trendline=&quot;ols&quot;  # 趋势线
+)
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/b8d2cb57-b816-47e5-a860-f8157384ccde.jpg" alt="img"></p>
+<pre><code>px.scatter_matrix(
+  iris,  # 数据
+  dimensions=[&quot;sepal_width&quot;,&quot;sepal_length&quot;,&quot;petal_width&quot;,&quot;petal_length&quot;],  # 维度选择
+  color=&quot;species&quot;)  # 颜色
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/0dc9c262-cf42-441e-b053-51832a534d54.jpg" alt="img"></p>
+<h5 id="平行对比图-：通过这张图，可以直观发现数据之间的相关性"><a href="#平行对比图-：通过这张图，可以直观发现数据之间的相关性" class="headerlink" title="平行对比图 ：通过这张图，可以直观发现数据之间的相关性"></a>平行对比图 ：通过这张图，可以直观发现数据之间的相关性</h5><pre><code>px.parallel_coordinates(
+  iris,   # 数据集
+  color=&quot;species_id&quot;,  # 颜色
+  labels=&#123;&quot;species_id&quot;:&quot;Species&quot;,  # 各种标签值
+          &quot;sepal_width&quot;:&quot;Sepal Width&quot;,
+          &quot;sepal_length&quot;:&quot;Sepal Length&quot;,
+          &quot;petal_length&quot;:&quot;Petal Length&quot;,
+          &quot;petal_width&quot;:&quot;Petal Width&quot;&#125;,
+  color_continuous_scale=px.colors.diverging.Tealrose,
+  color_continuous_midpoint=2)
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/7052c80e-6708-43bd-a2ce-c2021d87e23a.jpg" alt="img"></p>
+<h5 id="等高密度图"><a href="#等高密度图" class="headerlink" title="等高密度图"></a>等高密度图</h5><pre><code>px.density_contour(
+  iris,  # 绘图数据集
+  x=&quot;sepal_width&quot;,  # 横坐标
+  y=&quot;sepal_length&quot;,  # 纵坐标值
+  color=&quot;species&quot; , # 颜色
+  marginal_x=&quot;histogram&quot;, 
+  marginal_y=&quot;histogram&quot;
+)
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/2fb43c94-f40d-4435-868c-d808cb989151.jpg" alt="img"></p>
+<pre><code>px.density_contour(
+  iris, # 数据集
+  x=&quot;sepal_width&quot;,  # 横坐标值
+  y=&quot;sepal_length&quot;,  # 纵坐标值
+  color=&quot;species&quot;,  # 颜色
+  marginal_x=&quot;rug&quot;,  # 横轴为线条图
+  marginal_y=&quot;histogram&quot;   # 纵轴为直方图
+                  )
+          
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/5f88f765-87e8-4798-81ba-c2a665354091.jpg" alt="img"></p>
+<h5 id="热图"><a href="#热图" class="headerlink" title="热图"></a>热图</h5><pre><code>px.density_heatmap(
+  iris,  # 数据集
+  x=&quot;sepal_width&quot;,   # 横坐标值
+  y=&quot;sepal_length&quot;,  # 纵坐标值
+  marginal_y=&quot;rug&quot;,  # 纵坐标值为线型图
+  marginal_x=&quot;histogram&quot;  # 直方图
+                  )
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/a6d05892-8882-4ef3-9a52-d4c36bbfbeb3.jpg" alt="img"></p>
+<h5 id="再换个数据集看看"><a href="#再换个数据集看看" class="headerlink" title="再换个数据集看看"></a>再换个数据集看看</h5><pre><code># 小票数据集
+tips = px.data.tips()
+tips.head()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/548bb410-10c3-4c62-bb54-3e24fdc30013.jpg" alt="img"></p>
+<h5 id="平行种类图-前面一开始提到的桑基图就是基于此制作的"><a href="#平行种类图-前面一开始提到的桑基图就是基于此制作的" class="headerlink" title="平行种类图   前面一开始提到的桑基图就是基于此制作的"></a>平行种类图   前面一开始提到的桑基图就是基于此制作的</h5><pre><code>fig = px.parallel_categories(
+  tips,  # 数据集 
+  color=&quot;size&quot;,  # 颜色
+  color_continuous_scale=px.colors.sequential.Inferno)  # 颜色变化取值
+fig.show()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/547574ab-3f16-41d4-a9d3-d650f57fcaa5.jpg" alt="img"></p>
+<h5 id="柱状图"><a href="#柱状图" class="headerlink" title="柱状图"></a>柱状图</h5><pre><code>bar = px.bar(
+    tips, 
+       x=&quot;sex&quot;, 
+       y=&quot;total_bill&quot;, 
+       color=&quot;smoker&quot;, 
+       barmode=&quot;group&quot;)
+bar.show()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/3c87eb14-f953-42a8-8c4f-262c4f4d6a04.jpg" alt="img"></p>
+<pre><code>fig = px.bar(
+  tips,  # 数据集
+  x=&quot;sex&quot;,  # 横轴
+  y=&quot;total_bill&quot;,  # 纵轴
+  color=&quot;smoker&quot;,  # 颜色参数取值
+  barmode=&quot;group&quot;,  # 柱状图模式取值
+  facet_row=&quot;time&quot;,  # 行取值
+  facet_col=&quot;day&quot;,  # 列元素取值
+  category_orders=&#123;
+    &quot;day&quot;: [&quot;Thur&quot;,&quot;Fri&quot;,&quot;Sat&quot;,&quot;Sun&quot;],  # 分类顺序
+    &quot;time&quot;:[&quot;Lunch&quot;, &quot;Dinner&quot;]&#125;)
+fig.show()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/26b34a2f-4804-4f87-bc50-962b2977ff80.jpg" alt="img"></p>
+<h5 id="盒须图"><a href="#盒须图" class="headerlink" title="盒须图"></a>盒须图</h5><pre><code>px.box(tips,  # 数据集
+       x=&quot;day&quot;,  # 横轴数据
+       y=&quot;total_bill&quot;,  # 纵轴数据
+       color=&quot;smoker&quot;,  # 颜色
+       notched=True)  # 连接处的锥形部分显示出来
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/4d5f8d6d-dbd1-4413-b01c-a14a6f0b983d.jpg" alt="img"></p>
+<h5 id="小提琴图"><a href="#小提琴图" class="headerlink" title="小提琴图"></a>小提琴图</h5><pre><code>px.violin(
+    tips,   # 数据集
+    x=&quot;smoker&quot;,  # 横轴坐标
+    y=&quot;tip&quot;,  # 纵轴坐标  
+    color=&quot;sex&quot;,   # 颜色参数取值
+    box=True,   # box是显示内部的箱体
+    points=&quot;all&quot;,  # 同时显示数值点
+    hover_data=tips.columns)  # 结果中显示全部数据
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/00bb2cd1-3865-45bc-aebb-67207ea7f5a2.jpg" alt="img"></p>
+<h5 id="最后再来看一个内置数据集吧"><a href="#最后再来看一个内置数据集吧" class="headerlink" title="最后再来看一个内置数据集吧"></a>最后再来看一个内置数据集吧</h5><pre><code># 风数据集
+wind = px.data.wind()
+wind.head(10)
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/ea4b72fd-8a22-4f4f-9e1b-d8c64cd2b72c.jpg" alt="img"></p>
+<h5 id="极坐标图"><a href="#极坐标图" class="headerlink" title="极坐标图"></a>极坐标图</h5><pre><code>fig = px.scatter_polar(
+    wind, 
+    r = &quot;frequency&quot; , # 半径
+    theta = &quot;direction&quot;, # 角度
+    color = &quot;strength&quot;, # 颜色
+    symbol = &quot;strength&quot;, # 图标
+    color_continuous_scale=px.colors.sequential.Inferno  # 颜色变化取值
+    
+)
+fig.show()
+</code></pre>
+<h5 id="与散点图结合"><a href="#与散点图结合" class="headerlink" title="与散点图结合"></a>与散点图结合</h5><p><img src="http://files.mdnice.com/user/21987/2bfa3f56-83dc-41f2-b1e2-dc199b9a255d.jpg" alt="img"></p>
+<pre><code>fig = px.line_polar(
+    wind,  # 数据集
+    r=&quot;frequency&quot;,  # 半径
+    theta=&quot;direction&quot;,  # 角度
+    color=&quot;strength&quot;,  # 颜色
+    line_close=True,  # 线性闭合
+    color_discrete_sequence=px.colors.sequential.Plasma_r)  # 颜色变化
+fig.show()
+</code></pre>
+<h5 id="与线图结合"><a href="#与线图结合" class="headerlink" title="与线图结合"></a>与线图结合</h5><p><img src="http://files.mdnice.com/user/21987/d9f3bec2-d1aa-40fc-aab9-6a2baa423e7f.jpg" alt="img"></p>
+<h5 id="与柱状图结合"><a href="#与柱状图结合" class="headerlink" title="与柱状图结合"></a>与柱状图结合</h5><pre><code>fig = px.bar_polar(
+    wind,   # 数据集
+    r=&quot;frequency&quot;,   # 半径
+    theta=&quot;direction&quot;,  # 角度
+    color=&quot;strength&quot;,  # 颜色
+    template=&quot;plotly_dark&quot;,  # 主题
+    color_discrete_sequence=px.colors.sequential.Plasma_r)  # 颜色变化
+fig.show()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/49154cbe-fb88-44f6-b86b-d33d1b44798f.jpg" alt="img"></p>
+<h5 id="看完了这些是不是很想学习这个库呢？那就快去找官方文档看吧！"><a href="#看完了这些是不是很想学习这个库呢？那就快去找官方文档看吧！" class="headerlink" title="看完了这些是不是很想学习这个库呢？那就快去找官方文档看吧！"></a>看完了这些是不是很想学习这个库呢？那就快去找官方文档看吧！</h5>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/GrantEtude.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s1.328888.xyz/2022/06/04/W7Vg3.jpg" height=300 width=300></img>
+                    <p>曾粤</p>
+                    <span>I think,therefore I am</span>
+                    <dl>
+                        
+                        
+                            
+                                <dd>
+                                    <link rel="stylesheet" type="text/css" href="">
+                                    <a href="function link() { [native code] }" target="_blank"><span
+                                    class=" iconfont "></span></a>
+                                </dd>
+                            
+                            
+                            
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">10 <p>Articles</p></a></li>
+                    <li><a href="/categories">6 <p>Categories</p></a></li>
+                    <li><a href="/tags">9 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2022
+        <span class="gradient-text">
+            Zeng Yue
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.3" target="_blank" rel="noopener">v1.4.9.3</a></small>
+        
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['勇俭爱诚', '厚德博学，唯实求新'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>

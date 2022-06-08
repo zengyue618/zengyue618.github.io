@@ -5,13 +5,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>支持向量机——从方程到代码 - Hexo</title>
+    <title>破解ajax动态网页——爬取篮球比赛数据 - Hexo</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
-    <meta name="description" content="写在前面：  最近《机器学习》课程即将迎来期末考，就想借此机会把机器学习相关的知识系统梳理一遍。具体想法是将学过的算法自己推导一遍，然后将数学结论翻译为代码。
-  在此过程中，借鉴scikit-le,"> 
+    <meta name="description" content="前言今天遇到了群友的一个需求：
+爬取 https://www.sporttery.cn/jc/lqsgkj/ 全年的篮球赛果开奖数据，如下所示 
+一、网站分析这个网站的数据不是静态的，是动态加载的（,"> 
     <meta name="author" content="Zeng Yue"> 
     <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -75,7 +76,7 @@
     <div class="navigation animated fadeIn fast delay-1s">
         <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
         <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
-        <h3 class="subtitle">支持向量机——从方程到代码</h3>
+        <h3 class="subtitle">破解ajax动态网页——爬取篮球比赛数据</h3>
         <div class="social">
             <!--        <div class="like-icon">-->
             <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
@@ -105,25 +106,25 @@
         <div class="else">
             <p class="animated fadeInDown">
                 
-                <a href="/categories/机器学习"><b>「
-                    </b>机器学习<b> 」</b></a>
+                <a href="/categories/网络爬虫"><b>「
+                    </b>网络爬虫<b> 」</b></a>
                 
-                June 07, 2022
+                October 10, 2021
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2022/06/07/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E2%80%94%E2%80%94%E4%BB%8E%E6%96%B9%E7%A8%8B%E5%88%B0%E4%BB%A3%E7%A0%81/" title="支持向量机——从方程到代码" class="">支持向量机——从方程到代码</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/10/10/%E7%A0%B4%E8%A7%A3ajax%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E2%80%94%E2%80%94%E7%88%AC%E5%8F%96%E7%AF%AE%E7%90%83%E6%AF%94%E8%B5%9B%E6%95%B0%E6%8D%AE/" title="破解ajax动态网页——爬取篮球比赛数据" class="">破解ajax动态网页——爬取篮球比赛数据</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.6k
+                    5.2k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    8 mins.
+                    5 mins.
                 </span>
                 
                 
@@ -136,7 +137,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" rel="tag">支持向量机</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/selenium/" rel="tag">selenium</a></li></ul>
             
         </div>
     </div>
@@ -157,189 +158,90 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h2 id="写在前面："><a href="#写在前面：" class="headerlink" title="写在前面："></a>写在前面：</h2><p>  最近《机器学习》课程即将迎来期末考，就想借此机会把机器学习相关的知识系统梳理一遍。具体想法是将学过的算法自己推导一遍，然后将数学结论翻译为代码。</p>
-<p>  在此过程中，借鉴<strong>scikit-learn</strong>的api设计，仿照其形式实现<strong>mykit-learn</strong>。全程只用<strong>numpy</strong>以及python自带的数据结构完成所有内容（在支持向量机部分还会用到<strong>cvxopt</strong>，用以求解二次优化问题）。</p>
-<p>  mykit-learn现在的代码结构分为：decomposition降维、cluster聚类、classification分类、Regression回归以及public公共。</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTITT.png" alt="zTITT.png"></p>
-<p>  目前，降维部分有MDS、PCA以及KernelPCA；聚类部分有KMeans以及KMeans++；分类有Softmax回归、逻辑回归、决策树、K近邻以及SVC（支持向量机分类）；回归有线性回归。public部分则是存放一些公用模块的地方，例如核函数。（目前在PCA和SVC中运用，共有五种）</p>
-<p>  接下来将本在博客不定期更新<strong>mykit-learn</strong>的内容，今天就从我认为最“美”的算法——支持向量机开始！</p>
-<h2 id="一：算法思想"><a href="#一：算法思想" class="headerlink" title="一：算法思想"></a>一：算法思想</h2><p><img src="https://s1.328888.xyz/2022/06/07/zTc07.jpg" alt="zTc07.jpg"></p>
-<p>说白了就是学习一个m-1维度的超平面，将两类样本分开</p>
-<p>以二维空间的例子来理解一下</p>
-<p>负类的样本就在红色区域内，正类的样本就在绿色区域内，以决策超平面为分界</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTmVX.png" alt="zTmVX.png"></p>
-<h2 id="二：数学推导"><a href="#二：数学推导" class="headerlink" title="二：数学推导"></a>二：数学推导</h2><p>为了更好的分类，容错率更大，我们就希望间隔尽量大</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zT3GZ.png" alt="zT3GZ.png"></p>
-<p>与此同时，我们关注一下约束条件</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTKtC.png" alt="zTKtC.png"></p>
-<p>加上约束条件后，再看看最终后的优化目标</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTax1.png" alt="zTax1.png"></p>
-<p>运用拉格朗日方程优化</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTOag.png" alt="zTOag.png"></p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTn4t.png" alt="zTn4t.png"></p>
-<p>最终可以推出如下结论</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zT1ce.png" alt="zT1ce.png"></p>
-<p>也就是传说中的KKT条件</p>
-<h2 id="三：对偶问题"><a href="#三：对偶问题" class="headerlink" title="三：对偶问题"></a>三：对偶问题</h2><p>为了进一步简化问题，引入原优化问题的对偶问题</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTbNO.png" alt="zTbNO.png"></p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTViq.png" alt="zTViq.png"></p>
-<p>由于原问题和对偶问题同解，所以我们可以通过求解对偶问题来获得原问题的解</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTViq.png" alt="zTViq.png"></p>
-<p>将之前求得的KKT条件代入对偶问题的方程中，化简得到如下式子</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTjVm.png" alt="zTjVm.png"></p>
-<p>结合KKT条件，问题最终化归为求解带等式及不等式约束的二次凸优化问题</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zT6gA.png" alt="zT6gA.png"></p>
-<p>例如：</p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zc09m.png" alt="zc09m.png"></p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcsWA.jpg" alt="zcsWA.jpg"></p>
-<p>这类问题，我稍后将用cvxopt来求解</p>
-<h2 id="四：核技巧"><a href="#四：核技巧" class="headerlink" title="四：核技巧"></a>四：核技巧</h2><p>如果样本点在原来的空间中，不能用决策超平面分开</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTMtS.png" alt="zTMtS.png"></p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcRUR.png" alt="zcRUR.png"></p>
-<p>那么我们就将原来的样本点升到更高的维度中，在高维空间中决策超平面就可以将它们分开</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTPSJ.png" alt="zTPSJ.png"></p>
-<p>但是吧，这个升维的函数很难找啊，就算找到了，在计算的过程也要付出存储高维数据的代价，所以就用核函数代替。</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zcQiF.png" alt="zcQiF.png"></p>
-<p>核函数其实就是高维空间的点积</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTNaR.png" alt="zTNaR.png"></p>
-<p>例如：</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zToQi.png" alt="zToQi.png"></p>
-<p>寄希望于维度转换函数是不可靠的，升六维时，转换函数还有表达式，但无穷维呢？如何表达呢？</p>
-<p>例如：</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTB4v.png" alt="zTB4v.png"></p>
-<p>但是，高斯核函数却可以表示无穷维（本质上是指数函数可以用泰勒公式展开成无穷项）</p>
-<p><img src="https://s1.328888.xyz/2022/06/07/zTEc0.png" alt="zTEc0.png"></p>
-<p>说了那么多，让我们看看具体的程序代码吧</p>
-<h2 id="五：编程实践"><a href="#五：编程实践" class="headerlink" title="五：编程实践"></a>五：编程实践</h2><p> 依赖引入</p>
-<pre><code class="python">import numpy as np
-from cvxopt import matrix, solvers
-from numpy import ndarray
-from public.Kernel import Kernel
-
-# cvxopt设置解的精度，求解过程显示与否
-solvers.options[&#39;abstol&#39;] = 1e-12
-solvers.options[&#39;reltol&#39;] = 1e-10
-solvers.options[&#39;feastol&#39;] = 1e-10
-solvers.options[&#39;show_progress&#39;] = False
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天遇到了群友的一个需求：</p>
+<p>爬取 <a target="_blank" rel="noopener" href="https://www.sporttery.cn/jc/lqsgkj/">https://www.sporttery.cn/jc/lqsgkj/</a> 全年的篮球赛果开奖数据，如下所示 <img src="http://files.mdnice.com/user/21987/51f00a1a-7c94-44f0-be37-18a335b32b0d.jpg" alt="img"></p>
+<h1 id="一、网站分析"><a href="#一、网站分析" class="headerlink" title="一、网站分析"></a>一、网站分析</h1><p>这个网站的数据不是静态的，是动态加载的（选取相应日期，点击”开始查询“后，数据从服务端加载到浏览器）</p>
+<p><img src="http://files.mdnice.com/user/21987/069d660d-2950-4800-9a89-6758df9147c2.jpg" alt="img"></p>
+<p>看一下网页的低端，发现数据并不是一次性加载的，而是通过分页的形式完成 <img src="http://files.mdnice.com/user/21987/5f1b09e0-50c8-4978-8ba9-f7d70d358c73.jpg" alt="img"> 进一步研究还发现，每个月份的分页数并不是一致的，最多有8页 <img src="http://files.mdnice.com/user/21987/4f02e5ae-6da7-442d-9a91-5d495f6987be.jpg" alt="img"></p>
+<p>对日期的输入框进行分析，发现它是可以直接通过键盘输入日期的 <img src="http://files.mdnice.com/user/21987/9dbc9c3a-e9a5-4147-b221-f9a3c2178bd1.jpg" alt="img"></p>
+<h1 id="二：确定爬取方案"><a href="#二：确定爬取方案" class="headerlink" title="二：确定爬取方案"></a>二：确定爬取方案</h1><p>对于这种动态的网页，直接通过request库不太好爬取，而模拟人类操作浏览器的selenium对这种场景具有天然优势，所以我采用后者。对网页元素的定位则使用xpath。再此推荐蚂蚁老师的爬虫课程，简洁清晰，新手入门必备。</p>
+<p>大概的思路就是，先构建每月的开始月份、结束月份</p>
+<pre><code class="python">date = [(&quot;2021-01-01&quot;, &quot;2021-01-31&quot;), (&quot;2021-02-01&quot;, &quot;2021-02-28&quot;), (&quot;2021-03-01&quot;, &quot;2021-03-31&quot;),
+  (&quot;2021-04-01&quot;, &quot;2021-04-30&quot;), (&quot;2021-05-01&quot;, &quot;2021-05-31&quot;), (&quot;2021-06-01&quot;, &quot;2021-06-30&quot;),
+  (&quot;2021-07-01&quot;, &quot;2021-07-31&quot;),
+  (&quot;2021-08-01&quot;, &quot;2021-08-30&quot;), (&quot;2021-09-01&quot;, &quot;2021-09-31&quot;), (&quot;2021-10-01&quot;, &quot;2021-10-30&quot;),
+  (&quot;2021-11-01&quot;, &quot;2021-11-31&quot;),
+  (&quot;2021-12-01&quot;, &quot;2021-12-24&quot;)]
 </code></pre>
-<p>核函数模块</p>
-<pre><code class="python">import numpy as np
-from numpy import ndarray
-
-class Kernel:
-    def __init__(
-            self,
-            sigma: float = 1.0,
-            alpha: float = 1.0,
-            c: float = 1.0,
-            d: float = 1.0,
-            beta: float = 1.0,
-            theta: float = 1.0,
-    ):
-        self.theta = theta
-        self.beta = beta
-        self.d = d
-        self.c = c
-        self.alpha = alpha
-        self.sigma = sigma
-
-    def gauss(self, x: ndarray, y: ndarray) -&gt; float:
-        return np.exp(-np.sum((x - y) ** 2) / 2 * self.sigma ** 2)
-
-    def linear(self, x: ndarray, y: ndarray) -&gt; float:
-        return self.alpha * np.sum(x * y) + self.c
-
-    def poly(self, x: ndarray, y: ndarray) -&gt; float:
-        return self.linear(x, y) ** self.d
-
-    def sigmoid(self, x: ndarray, y: ndarray) -&gt; float:
-        return np.tanh(self.beta * np.sum(x * y) + self.theta)
-
-    def laplace(self, x: ndarray, y: ndarray) -&gt; float:
-        return np.exp(-np.sum(np.abs(x - y)) / self.sigma)
+<p>再用这些数据分别输入到开始框和结束框内 <img src="http://files.mdnice.com/user/21987/dc0a7699-4476-45fa-8da1-75eb6cedaf3a.jpg" alt="img"> <img src="http://files.mdnice.com/user/21987/21d53b8e-bfca-4832-b684-e2235c740e96.jpg" alt="img"></p>
+<p>点击查询 <img src="http://files.mdnice.com/user/21987/ddfb4718-c27c-48e6-8b98-7c4064933fe6.jpg" alt="img"></p>
+<p>点击分页 <img src="http://files.mdnice.com/user/21987/f3fb0ecd-b870-4882-b15a-e21b56c8ef61.jpg" alt="img"> 特别注意到分页的xpath路径是有规律的，因而我们可以构造xpath路径，方便接下来的爬取</p>
+<pre><code class="python">Xpath = [f&#39;//*[@id=&quot;matchList&quot;]/div/div/ul/li[&#123;i&#125;]&#39; for i in range(2, 10)]
 </code></pre>
-<p>SVC类的初始化函数</p>
-<p>x: 训练数据 y: 标签 kernel: 核函数 w: 决策超平面的斜率数组 b: 决策超平面的截距 sigma: 高斯核与拉普拉斯核的参数 alpha: 线性核 多项式核的参数 c: 线性核 多项式核的参数 d: 多项式核的参数 beta: sigmoid的参数 theta: sigmoid参数</p>
-<pre><code class="python">class SVC:
-    def __init__(
-            self,
-            kernel: str = None,
-            sigma: float = 1.0,
-            alpha: float = 1.0,
-            c: float = 1.0,
-            d: float = 1.0,
-            beta: float = 1.0,
-            theta: float = 1.0,
-    ):
-        self.w = None
-        self.b = None
-        self.kernel = kernel
-        self.theta = theta
-        self.beta = beta
-        self.d = d
-        self.c = c
-        self.alpha = alpha
-        self.sigma = sigma
-        self.support_vector = None
+<p>爬取内容 <img src="http://files.mdnice.com/user/21987/61104325-5c2c-4c72-aafe-9d5e84294634.jpg" alt="img"></p>
+<h1 id="三：编码实现"><a href="#三：编码实现" class="headerlink" title="三：编码实现"></a>三：编码实现</h1><pre><code class="python">from selenium.webdriver import Edge
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+import time
+
+driver = Edge(executable_path=&quot;C:/WebDriver/bin/msedgedriver.exe&quot;)
+date = [(&quot;2021-01-01&quot;, &quot;2021-01-31&quot;), (&quot;2021-02-01&quot;, &quot;2021-02-28&quot;), (&quot;2021-03-01&quot;, &quot;2021-03-31&quot;),
+  (&quot;2021-04-01&quot;, &quot;2021-04-30&quot;), (&quot;2021-05-01&quot;, &quot;2021-05-31&quot;), (&quot;2021-06-01&quot;, &quot;2021-06-30&quot;),
+  (&quot;2021-07-01&quot;, &quot;2021-07-31&quot;),
+  (&quot;2021-08-01&quot;, &quot;2021-08-30&quot;), (&quot;2021-09-01&quot;, &quot;2021-09-31&quot;), (&quot;2021-10-01&quot;, &quot;2021-10-30&quot;),
+  (&quot;2021-11-01&quot;, &quot;2021-11-31&quot;),
+  (&quot;2021-12-01&quot;, &quot;2021-12-24&quot;)]
+
+Xpath = [f&#39;//*[@id=&quot;matchList&quot;]/div/div/ul/li[&#123;i&#125;]&#39; for i in range(2, 10)]
+
+
+# 判断xpath存不存在的函数
+def NodeExists(xpath):
+ try:
+  driver.find_element_by_xpath(xpath)
+  return True
+ except:
+  return False
+
+
+def crawler():
+ for item in date:
+  # 打开网页
+  driver.get(&quot;https://www.sporttery.cn/jc/lqsgkj/&quot;)
+  # 等待加载
+  WebDriverWait(driver, 10).until(lambda d: &quot;篮球赛果开奖&quot; in d.title)
+  # 等待一秒后 先清空再输入开始日期
+  time.sleep(1)
+  driver.find_element(By.XPATH, &#39;//*[@id=&quot;start_date&quot;]&#39;).clear()
+  driver.find_element(By.XPATH, &#39;//*[@id=&quot;start_date&quot;]&#39;).send_keys(item[0])
+  # 再等一秒 先清空再输入结束日期
+  time.sleep(1)
+  driver.find_element(By.XPATH, &#39;//*[@id=&quot;end_date&quot;]&#39;).clear()
+  driver.find_element(By.XPATH, &#39;//*[@id=&quot;end_date&quot;]&#39;).send_keys(item[1])
+  # 点击查询
+  driver.find_element(By.XPATH, &#39;//*[@id=&quot;headerTr&quot;]/div[1]/div[1]/div/a&#39;).click()
+  print(f&quot;开始爬取&#123;item[0]&#125;&quot;)
+  with open(f&quot;&#123;item[0]&#125;.csv&quot;, &quot;w&quot;, encoding=&#39;ANSI&#39;) as fin:
+   # 点击1-8页内容
+   page = 1
+   for this in Xpath:
+    time.sleep(1)
+    if NodeExists(this):
+     driver.find_element(By.XPATH, this).click()
+    else:
+     print(f&quot;没有&#123;this&#125;这个xpath&quot;)
+     break
+    time.sleep(1)
+    content = driver.find_element(By.XPATH, &#39;//*[@id=&quot;matchList&quot;]/table&#39;).text
+    fin.write(&quot;\n&quot; + content)
+    print(f&quot;完成第&#123;page&#125;页的爬取,此时的xpath是:&#123;this&#125;&quot;)
+    page += 1
+  print(f&quot;结束爬取&#123;item[0]&#125;&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+ crawler()
 </code></pre>
-<p>计算参数的函数</p>
-<p>这些参数包括了求解二次优化相关的参数</p>
-<p>其中的P,q,G,h,A,b的含义可以参考下图</p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcaJy.png" alt="zcaJy.png"></p>
-<pre><code class="python">    def __calculate_parameter(self, x: ndarray, y: ndarray):
-        kernel = Kernel(sigma=self.sigma, alpha=self.alpha, c=self.c, d=self.d, beta=self.beta, theta=self.theta)
-        kernel_func = &#123;
-            &quot;linear&quot;: kernel.linear,
-            &quot;poly&quot;: kernel.poly,
-            &quot;sigmoid&quot;: kernel.sigmoid,
-            &quot;laplace&quot;: kernel.laplace,
-            &quot;gauss&quot;: kernel.gauss,
-            None: np.dot
-        &#125;
-        m, _ = np.shape(x)
-        P = np.zeros((m, m))
-        for i in range(m):
-            for j in range(m):
-                P[i, j] = kernel_func.get(self.kernel, None)(x[i], x[j]) * y[i] * y[j]
-        P = matrix(P)
-        q = matrix(-np.ones(m))
-        G = matrix(np.diag(-np.ones(m)))
-        h = matrix(np.zeros(m))
-        A = matrix(y, (1, m), tc=&#39;d&#39;)
-        b = matrix([0.0])
-        res = solvers.qp(P, q, G, h, A, b)
-        λ = np.around(np.array(res[&#39;x&#39;]).flatten(), 2)
-        self.w = np.array(reduce(lambda a, b: a + b, map(lambda item: item[0] * item[1] * item[2], zip(λ, y, x))))
-        self.__support_index = [index for index, data in enumerate(λ) if data != 0]
-</code></pre>
-<p>训练函数</p>
-<p>输入x（m*n）数据，y（1 * m）标签 （+1&#x2F;-1）</p>
-<p>训练得到决策超平面的斜率和截距</p>
-<pre><code class="python">    def fit(self, x: ndarray, y: ndarray):
-        self.__calculate_parameter(x, y)
-        self.support_vector = x[self.__support_index]
-        self.b = 1 / y[self.__support_index[0]] - np.dot(x[self.__support_index[0]], self.w)
-</code></pre>
-<p>预测函数</p>
-<p>输入：待预测的数据</p>
-<p>输出：标签  +1或-1</p>
-<pre><code class="python">    def predict(self, data: ndarray):
-        return 1 if np.dot(data, self.w) + self.b &gt;= 0 else -1
-</code></pre>
-<h2 id="六：计算检验"><a href="#六：计算检验" class="headerlink" title="六：计算检验"></a>六：计算检验</h2><p>以老师PPT中的题目为例</p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcbeQ.jpg" alt="zcbeQ.jpg"></p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcVw4.jpg" alt="zcVw4.jpg"></p>
-<pre><code class="python">if __name__ == &quot;__main__&quot;:
-    svc = SVC()
-    svc.fit(np.array([[3, 3], [4, 3], [1, 1]]), np.array([1, 1, -1]))
-    print(&quot;决策超平面的斜率是：&quot;, svc.w)
-    print(&quot;决策超平面的截距为：&quot;, svc.b)
-    print(&quot;支持向量是：\n&quot;, svc.support_vector)
-    print(&quot;预测 (0.5, 0.5)的类别：&quot;, svc.predict(np.array([0.5, 0.5])))
-</code></pre>
-<p>结果如下，正确且非常直观</p>
-<p><img src="https://s1.328888.xyz/2022/06/08/zcFq3.png" alt="zcFq3.png"></p>
-<h2 id="七：完整代码"><a href="#七：完整代码" class="headerlink" title="七：完整代码"></a>七：完整代码</h2><p>放在我的GitHub了哦~</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -406,7 +308,7 @@ class Kernel:
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">写在前面：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%EF%BC%9A%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3"><span class="toc-number">2.</span> <span class="toc-text">一：算法思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%EF%BC%9A%E6%95%B0%E5%AD%A6%E6%8E%A8%E5%AF%BC"><span class="toc-number">3.</span> <span class="toc-text">二：数学推导</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%EF%BC%9A%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">三：对偶问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%EF%BC%9A%E6%A0%B8%E6%8A%80%E5%B7%A7"><span class="toc-number">5.</span> <span class="toc-text">四：核技巧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%EF%BC%9A%E7%BC%96%E7%A8%8B%E5%AE%9E%E8%B7%B5"><span class="toc-number">6.</span> <span class="toc-text">五：编程实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%A3%80%E9%AA%8C"><span class="toc-number">7.</span> <span class="toc-text">六：计算检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%EF%BC%9A%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">8.</span> <span class="toc-text">七：完整代码</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BD%91%E7%AB%99%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">一、网站分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%EF%BC%9A%E7%A1%AE%E5%AE%9A%E7%88%AC%E5%8F%96%E6%96%B9%E6%A1%88"><span class="toc-number">3.</span> <span class="toc-text">二：确定爬取方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%EF%BC%9A%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">三：编码实现</span></a></li></ol>
                 </div>
             </div>
             

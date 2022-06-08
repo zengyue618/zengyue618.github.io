@@ -1,0 +1,1213 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RFM客户分类模型 - Hexo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="今天为大家分析一个英国在线零售商的交易数据集
+着重为大家介绍一下如何运用RFM模型对客户进行分类 
+并且解决如下问题：1.以星期为单位，周几的销售额最高？请可视化显示。2.利用 RFM 模型，对 U,"> 
+    <meta name="author" content="Zeng Yue"> 
+    <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = "7471325035"</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Hexo</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">RFM客户分类模型</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('https://s1.328888.xyz/2022/06/04/WIr9R.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/数据分析"><b>「
+                    </b>数据分析<b> 」</b></a>
+                
+                December 27, 2021
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/12/27/RFM%E5%AE%A2%E6%88%B7%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8B/" title="RFM客户分类模型" class="">RFM客户分类模型</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    24k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    22 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/pandas/" rel="tag">pandas</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h5 id="今天为大家分析一个英国在线零售商的交易数据集"><a href="#今天为大家分析一个英国在线零售商的交易数据集" class="headerlink" title="今天为大家分析一个英国在线零售商的交易数据集"></a>今天为大家分析一个英国在线零售商的交易数据集</h5><p><img src="http://files.mdnice.com/user/21987/d5d9c81c-1b03-478e-b526-8274e397f31f.jpg" alt="img"></p>
+<h5 id="着重为大家介绍一下如何运用RFM模型对客户进行分类"><a href="#着重为大家介绍一下如何运用RFM模型对客户进行分类" class="headerlink" title="着重为大家介绍一下如何运用RFM模型对客户进行分类"></a>着重为大家介绍一下如何运用RFM模型对客户进行分类</h5><p><img src="http://files.mdnice.com/user/21987/a56f5497-2a07-4201-8d09-8abba3ae3d9b.jpg" alt="img"> <img src="http://files.mdnice.com/user/21987/67da1fdd-5003-4999-b4b7-758958dd4ddc.jpg" alt="img"></p>
+<h5 id="并且解决如下问题："><a href="#并且解决如下问题：" class="headerlink" title="并且解决如下问题："></a>并且解决如下问题：</h5><h5 id="1-以星期为单位，周几的销售额最高？请可视化显示。"><a href="#1-以星期为单位，周几的销售额最高？请可视化显示。" class="headerlink" title="1.以星期为单位，周几的销售额最高？请可视化显示。"></a>1.以星期为单位，周几的销售额最高？请可视化显示。</h5><h5 id="2-利用-RFM-模型，对-United-Kingdom-的用户进行分类，分为如下所述的六类。"><a href="#2-利用-RFM-模型，对-United-Kingdom-的用户进行分类，分为如下所述的六类。" class="headerlink" title="2.利用 RFM 模型，对 United Kingdom 的用户进行分类，分为如下所述的六类。"></a>2.利用 RFM 模型，对 United Kingdom 的用户进行分类，分为如下所述的六类。</h5><h5 id="a-选用合适的图形，可视化展示每一类用户数占总数的比例；可视化展示每一类用户消费额占总消费额的比例。"><a href="#a-选用合适的图形，可视化展示每一类用户数占总数的比例；可视化展示每一类用户消费额占总消费额的比例。" class="headerlink" title="a) 选用合适的图形，可视化展示每一类用户数占总数的比例；可视化展示每一类用户消费额占总消费额的比例。"></a>a) 选用合适的图形，可视化展示每一类用户数占总数的比例；可视化展示每一类用户消费额占总消费额的比例。</h5><h5 id="b-对每一类用户，显示其每个月的消费总额的变化情况。（显示在一个-figure-中"><a href="#b-对每一类用户，显示其每个月的消费总额的变化情况。（显示在一个-figure-中" class="headerlink" title="b) 对每一类用户，显示其每个月的消费总额的变化情况。（显示在一个 figure 中"></a>b) 对每一类用户，显示其每个月的消费总额的变化情况。（显示在一个 figure 中</h5><h4 id="以下是具体的代码"><a href="#以下是具体的代码" class="headerlink" title="以下是具体的代码"></a>以下是具体的代码</h4><pre><code>import pandas as pd
+</code></pre>
+<h3 id="读取数据，并且对数据格式作出一些调整，方便后续分析"><a href="#读取数据，并且对数据格式作出一些调整，方便后续分析" class="headerlink" title="读取数据，并且对数据格式作出一些调整，方便后续分析"></a>读取数据，并且对数据格式作出一些调整，方便后续分析</h3><pre><code># 读取并且查看数据
+df = pd.read_csv(&quot;Online Retail(1).csv&quot;)
+df.head()
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">InvoiceNo</th>
+<th align="left">StockCode</th>
+<th align="left">Description</th>
+<th align="left">Quantity</th>
+<th align="left">InvoiceDate</th>
+<th align="left">UnitPrice</th>
+<th align="left">CustomerID</th>
+<th align="left">Country</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">536365</td>
+<td align="left">85123A</td>
+<td align="left">WHITE HANGING HEART T-LIGHT HOLDER</td>
+<td align="left">6</td>
+<td align="left">2010&#x2F;12&#x2F;1 8:26</td>
+<td align="left">2.55</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">536365</td>
+<td align="left">71053</td>
+<td align="left">WHITE METAL LANTERN</td>
+<td align="left">6</td>
+<td align="left">2010&#x2F;12&#x2F;1 8:26</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">536365</td>
+<td align="left">84406B</td>
+<td align="left">CREAM CUPID HEARTS COAT HANGER</td>
+<td align="left">8</td>
+<td align="left">2010&#x2F;12&#x2F;1 8:26</td>
+<td align="left">2.75</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">536365</td>
+<td align="left">84029G</td>
+<td align="left">KNITTED UNION FLAG HOT WATER BOTTLE</td>
+<td align="left">6</td>
+<td align="left">2010&#x2F;12&#x2F;1 8:26</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">536365</td>
+<td align="left">84029E</td>
+<td align="left">RED WOOLLY HOTTIE WHITE HEART.</td>
+<td align="left">6</td>
+<td align="left">2010&#x2F;12&#x2F;1 8:26</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+</tr>
+</tbody></table>
+<pre><code># 将时间数据设置为pandas的数据格式
+df[&quot;InvoiceDate&quot;] = pd.to_datetime(df[&quot;InvoiceDate&quot;])
+# 注：由于最近一次购物(Recency)是针对某个时间点计算的，而最后订货日期是 2011-12-09，因此
+# 我们把 2011-12-10 当作今天，来计算 Recency。
+df[&quot;target_time&quot;] = pd.to_datetime(&quot;2011-12-10&quot;)
+# 计算 Recency
+df[&quot;Recency&quot;] = pd.to_datetime(df[&quot;target_time&quot;]) - pd.to_datetime(df[&quot;InvoiceDate&quot;])
+# 计算每个订单的总金额
+df[&quot;total&quot;] = df[&quot;Quantity&quot;] * df[&quot;UnitPrice&quot;]
+df.head()
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">InvoiceNo</th>
+<th align="left">StockCode</th>
+<th align="left">Description</th>
+<th align="left">Quantity</th>
+<th align="left">InvoiceDate</th>
+<th align="left">UnitPrice</th>
+<th align="left">CustomerID</th>
+<th align="left">Country</th>
+<th align="left">target_time</th>
+<th align="left">Recency</th>
+<th align="left">total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">536365</td>
+<td align="left">85123A</td>
+<td align="left">WHITE HANGING HEART T-LIGHT HOLDER</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">2.55</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">15.30</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">536365</td>
+<td align="left">71053</td>
+<td align="left">WHITE METAL LANTERN</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">20.34</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">536365</td>
+<td align="left">84406B</td>
+<td align="left">CREAM CUPID HEARTS COAT HANGER</td>
+<td align="left">8</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">2.75</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">22.00</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">536365</td>
+<td align="left">84029G</td>
+<td align="left">KNITTED UNION FLAG HOT WATER BOTTLE</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">20.34</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">536365</td>
+<td align="left">84029E</td>
+<td align="left">RED WOOLLY HOTTIE WHITE HEART.</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">20.34</td>
+</tr>
+</tbody></table>
+<h4 id="设置分析所需的星期、月份等属性，方便按此聚合"><a href="#设置分析所需的星期、月份等属性，方便按此聚合" class="headerlink" title="设置分析所需的星期、月份等属性，方便按此聚合"></a>设置分析所需的星期、月份等属性，方便按此聚合</h4><pre><code>df[&quot;星期&quot;] = df[&quot;InvoiceDate&quot;].dt.dayofweek+1
+df[&quot;月份&quot;] = df[&quot;InvoiceDate&quot;].dt.month
+df.head()
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">InvoiceNo</th>
+<th align="left">StockCode</th>
+<th align="left">Description</th>
+<th align="left">Quantity</th>
+<th align="left">InvoiceDate</th>
+<th align="left">UnitPrice</th>
+<th align="left">CustomerID</th>
+<th align="left">Country</th>
+<th align="left">target_time</th>
+<th align="left">Recency</th>
+<th align="left">total</th>
+<th align="left">星期</th>
+<th align="left">月份</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">536365</td>
+<td align="left">85123A</td>
+<td align="left">WHITE HANGING HEART T-LIGHT HOLDER</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">2.55</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">15.30</td>
+<td align="left">3</td>
+<td align="left">12</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">536365</td>
+<td align="left">71053</td>
+<td align="left">WHITE METAL LANTERN</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">20.34</td>
+<td align="left">3</td>
+<td align="left">12</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">536365</td>
+<td align="left">84406B</td>
+<td align="left">CREAM CUPID HEARTS COAT HANGER</td>
+<td align="left">8</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">2.75</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">22.00</td>
+<td align="left">3</td>
+<td align="left">12</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">536365</td>
+<td align="left">84029G</td>
+<td align="left">KNITTED UNION FLAG HOT WATER BOTTLE</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">20.34</td>
+<td align="left">3</td>
+<td align="left">12</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">536365</td>
+<td align="left">84029E</td>
+<td align="left">RED WOOLLY HOTTIE WHITE HEART.</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">20.34</td>
+<td align="left">3</td>
+<td align="left">12</td>
+</tr>
+</tbody></table>
+<h3 id="按星期聚合总销售额"><a href="#按星期聚合总销售额" class="headerlink" title="按星期聚合总销售额"></a>按星期聚合总销售额</h3><pre><code>df_by_w = df.groupby(&quot;星期&quot;).agg(&#123;&quot;total&quot;:&quot;sum&quot;&#125;).reset_index()
+df_by_w
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">星期</th>
+<th align="left">total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1588609.431</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">1966182.791</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">3</td>
+<td align="left">1734147.010</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">4</td>
+<td align="left">2112519.000</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="left">1540610.811</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="left">805678.891</td>
+</tr>
+</tbody></table>
+<pre><code>from pyecharts import options as opts
+from pyecharts.charts import Bar
+bar = (
+    Bar()
+    .add_xaxis(df_by_w[&quot;星期&quot;].to_list())
+    .add_yaxis(&quot;销售额&quot;, df_by_w[&quot;total&quot;].to_list())
+    .set_global_opts(title_opts=opts.TitleOpts(title=&quot;销售额对比图&quot;))
+)
+</code></pre>
+<h4 id="以星期为单位，周几的销售额最高？-答案是周四"><a href="#以星期为单位，周几的销售额最高？-答案是周四" class="headerlink" title="以星期为单位，周几的销售额最高？ 答案是周四"></a>以星期为单位，周几的销售额最高？ 答案是周四</h4><pre><code>bar.render_notebook()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/0c7b93bd-3c36-4def-aff2-01690f791513.jpg" alt="img"></p>
+<h4 id="利用-RFM-模型，对-United-Kingdom-的用户进行分类"><a href="#利用-RFM-模型，对-United-Kingdom-的用户进行分类" class="headerlink" title="利用 RFM 模型，对 United Kingdom 的用户进行分类"></a>利用 RFM 模型，对 United Kingdom 的用户进行分类</h4><h4 id="按客户ID聚合，对发票订单号进行计数，对每个发票的销售额进行汇总，对recency取最小值（作为该顾客的recency值）"><a href="#按客户ID聚合，对发票订单号进行计数，对每个发票的销售额进行汇总，对recency取最小值（作为该顾客的recency值）" class="headerlink" title="按客户ID聚合，对发票订单号进行计数，对每个发票的销售额进行汇总，对recency取最小值（作为该顾客的recency值）"></a>按客户ID聚合，对发票订单号进行计数，对每个发票的销售额进行汇总，对recency取最小值（作为该顾客的recency值）</h4><pre><code>df_by_c = df.groupby(&quot;CustomerID&quot;).agg(&#123;&quot;InvoiceNo&quot;:&quot;count&quot;, &quot;total&quot;:&quot;sum&quot;, &quot;Recency&quot;:&quot;min&quot;&#125;).reset_index()
+df_by_c.columns = [&quot;CustomerID&quot;,&quot;Frequency&quot;,&quot;Monetary&quot;,&quot;Recency&quot;]
+df_by_c.head()
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">CustomerID</th>
+<th align="left">Frequency</th>
+<th align="left">Monetary</th>
+<th align="left">Recency</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">12346.0</td>
+<td align="left">2</td>
+<td align="left">0.00</td>
+<td align="left">325 days 13:43:00</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">12347.0</td>
+<td align="left">182</td>
+<td align="left">4310.00</td>
+<td align="left">2 days 08:08:00</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">12348.0</td>
+<td align="left">31</td>
+<td align="left">1797.24</td>
+<td align="left">75 days 10:47:00</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">12349.0</td>
+<td align="left">73</td>
+<td align="left">1757.55</td>
+<td align="left">18 days 14:09:00</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">12350.0</td>
+<td align="left">17</td>
+<td align="left">334.40</td>
+<td align="left">310 days 07:59:00</td>
+</tr>
+</tbody></table>
+<h3 id="求出各列的四分位数"><a href="#求出各列的四分位数" class="headerlink" title="求出各列的四分位数"></a>求出各列的四分位数</h3><pre><code>df_by_c[&quot;Frequency&quot;].quantile([0.25,0.5,0.75])
+0.25     17.0
+0.50     42.0
+0.75    102.0
+Name: Frequency, dtype: float64
+df_by_c[&quot;Monetary&quot;].quantile([0.25,0.5,0.75])
+0.25     293.3625
+0.50     648.0750
+0.75    1611.7250
+Name: Monetary, dtype: float64
+</code></pre>
+<h5 id="将Recency这列的数据格式转为整数（取day这个属性就可以了）"><a href="#将Recency这列的数据格式转为整数（取day这个属性就可以了）" class="headerlink" title="将Recency这列的数据格式转为整数（取day这个属性就可以了）"></a>将Recency这列的数据格式转为整数（取day这个属性就可以了）</h5><pre><code>df_by_c[&quot;Recency&quot;] = df_by_c[&quot;Recency&quot;].dt.days
+df_by_c[&quot;Recency&quot;].quantile([0.25,0.5,0.75])
+0.25     16.0
+0.50     50.0
+0.75    143.0
+Name: Recency, dtype: float64
+</code></pre>
+<h4 id="按照刚才求得的各项指标的四分位数，制定相应的函数，计算RFM的值"><a href="#按照刚才求得的各项指标的四分位数，制定相应的函数，计算RFM的值" class="headerlink" title="按照刚才求得的各项指标的四分位数，制定相应的函数，计算RFM的值"></a>按照刚才求得的各项指标的四分位数，制定相应的函数，计算RFM的值</h4><pre><code>def decide_F(score):
+    if score&gt;102:
+        return 1
+    elif score&gt;42:
+        return 2
+    elif score&gt;17:
+        return 3
+    else:
+        return 4
+    
+def decide_M(score):
+    if score&gt;1611.725:
+        return 1
+    elif score&gt;648.075:
+        return 2
+    elif score&gt;293.3625:
+        return 3
+    else:
+        return 4
+    
+def decide_R(score):
+    if score&lt;16:
+        return 1
+    elif score&lt;50:
+        return 2
+    elif score&lt;143:
+        return 3
+    else:
+        return 4
+df_by_c[&quot;F&quot;] = df_by_c.apply(lambda x: decide_F(x.Frequency), axis = 1)
+df_by_c[&quot;M&quot;] = df_by_c.apply(lambda x: decide_F(x.Monetary), axis = 1)
+df_by_c[&quot;R&quot;] = df_by_c.apply(lambda x: decide_R(x.Recency), axis = 1)
+</code></pre>
+<h4 id="看一下求得的值"><a href="#看一下求得的值" class="headerlink" title="看一下求得的值"></a>看一下求得的值</h4><pre><code>df_by_c.head()
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">CustomerID</th>
+<th align="left">Frequency</th>
+<th align="left">Monetary</th>
+<th align="left">Recency</th>
+<th align="left">F</th>
+<th align="left">M</th>
+<th align="left">R</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">12346.0</td>
+<td align="left">2</td>
+<td align="left">0.00</td>
+<td align="left">325</td>
+<td align="left">4</td>
+<td align="left">4</td>
+<td align="left">4</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">12347.0</td>
+<td align="left">182</td>
+<td align="left">4310.00</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">12348.0</td>
+<td align="left">31</td>
+<td align="left">1797.24</td>
+<td align="left">75</td>
+<td align="left">3</td>
+<td align="left">1</td>
+<td align="left">3</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">12349.0</td>
+<td align="left">73</td>
+<td align="left">1757.55</td>
+<td align="left">18</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">12350.0</td>
+<td align="left">17</td>
+<td align="left">334.40</td>
+<td align="left">310</td>
+<td align="left">4</td>
+<td align="left">1</td>
+<td align="left">4</td>
+</tr>
+</tbody></table>
+<h3 id="根据定义，制定对客户进行类型划分的函数"><a href="#根据定义，制定对客户进行类型划分的函数" class="headerlink" title="根据定义，制定对客户进行类型划分的函数"></a>根据定义，制定对客户进行类型划分的函数</h3><pre><code>def decide_type(f, m, r):
+    if f == 1 and m == 1 and r == 1:
+        return &quot;最佳客户&quot;
+    if f == 1 and m == 1 and r == 3:
+        return &quot;近流失客户&quot;
+    if f == 1 and m == 1 and r == 4:
+        return &quot;流失客户&quot;
+    if f == 4 and m == 4 and r == 4:
+        return &quot;流失廉价客户&quot;
+    if f == 1:
+        return &quot;忠诚客户&quot;
+    if m == 1:
+        return &quot;大金主&quot;
+        
+    
+df_by_c[&quot;客户类型&quot;] =  df_by_c.apply(lambda x: decide_type(x.F, x.M ,x.R), axis = 1)
+df_by_c.head()
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">CustomerID</th>
+<th align="left">Frequency</th>
+<th align="left">Monetary</th>
+<th align="left">Recency</th>
+<th align="left">F</th>
+<th align="left">M</th>
+<th align="left">R</th>
+<th align="left">客户类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">12346.0</td>
+<td align="left">2</td>
+<td align="left">0.00</td>
+<td align="left">325</td>
+<td align="left">4</td>
+<td align="left">4</td>
+<td align="left">4</td>
+<td align="left">流失廉价客户</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">12347.0</td>
+<td align="left">182</td>
+<td align="left">4310.00</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">最佳客户</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">12348.0</td>
+<td align="left">31</td>
+<td align="left">1797.24</td>
+<td align="left">75</td>
+<td align="left">3</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">大金主</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">12349.0</td>
+<td align="left">73</td>
+<td align="left">1757.55</td>
+<td align="left">18</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">大金主</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">12350.0</td>
+<td align="left">17</td>
+<td align="left">334.40</td>
+<td align="left">310</td>
+<td align="left">4</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">大金主</td>
+</tr>
+</tbody></table>
+<pre><code>df_by_c_count = df_by_c.groupby(&quot;客户类型&quot;).size().sort_values(ascending=False)
+df_by_c_count
+客户类型
+大金主       3064
+最佳客户       533
+忠诚客户       347
+近流失客户      154
+流失客户        47
+流失廉价客户      39
+dtype: int64
+datas = list(zip(df_by_c_count.index.to_list(), df_by_c_count.to_list()))
+datas
+[(&#39;大金主&#39;, 3064),
+ (&#39;最佳客户&#39;, 533),
+ (&#39;忠诚客户&#39;, 347),
+ (&#39;近流失客户&#39;, 154),
+ (&#39;流失客户&#39;, 47),
+ (&#39;流失廉价客户&#39;, 39)]
+from pyecharts import options as opts
+from pyecharts.charts import Pie
+def create_pie(datas, title) -&gt; Pie:
+    &quot;&quot;&quot; 创建饼图对象
+    文档地址：https://pyecharts.org/#/zh-cn/basic_charts?id=pie%ef%bc%9a%e9%a5%bc%e5%9b%be
+    @param datas: 数据，形式为[(&#39;类型1&#39;, 数据1), (&#39;类型2&#39;, 数据2), (&#39;类型3&#39;, 数据3)]
+    @param title: 图表的标题
+    &quot;&quot;&quot;
+    pie = Pie()
+    pie.add(&quot;&quot;, datas)
+    pie.set_global_opts(
+        title_opts=opts.TitleOpts(title=title),
+        legend_opts=opts.LegendOpts(pos_right=&quot;right&quot;)
+    )
+    pie.set_series_opts(label_opts=opts.LabelOpts(formatter=&quot;&#123;b&#125;: &#123;c&#125;: &#123;d&#125;%&quot;))
+    return pie
+</code></pre>
+<h3 id="a）可视化展示每一类用户数占总数的比例"><a href="#a）可视化展示每一类用户数占总数的比例" class="headerlink" title="a）可视化展示每一类用户数占总数的比例"></a>a）可视化展示每一类用户数占总数的比例</h3><pre><code>pie = create_pie(datas, &quot;饼图-客户类型对比&quot;)
+pie.render_notebook()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/5d0a189e-0d19-4817-8d1d-9ed9c1b471d9.jpg" alt="img"></p>
+<h4 id="取出”CustomerID”-“客户类型”这两列，准备与df合并"><a href="#取出”CustomerID”-“客户类型”这两列，准备与df合并" class="headerlink" title="取出”CustomerID”,  “客户类型”这两列，准备与df合并"></a>取出”CustomerID”,  “客户类型”这两列，准备与df合并</h4><pre><code>df1 = df_by_c[[&quot;CustomerID&quot;,  &quot;客户类型&quot;]]
+new = pd.merge(df, df1, on=&quot;CustomerID&quot;)
+new.head()
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">InvoiceNo</th>
+<th align="left">StockCode</th>
+<th align="left">Description</th>
+<th align="left">Quantity</th>
+<th align="left">InvoiceDate</th>
+<th align="left">UnitPrice</th>
+<th align="left">CustomerID</th>
+<th align="left">Country</th>
+<th align="left">target_time</th>
+<th align="left">Recency</th>
+<th align="left">total</th>
+<th align="left">星期</th>
+<th align="left">月份</th>
+<th align="left">客户类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">536365</td>
+<td align="left">85123A</td>
+<td align="left">WHITE HANGING HEART T-LIGHT HOLDER</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">2.55</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">15.30</td>
+<td align="left">3</td>
+<td align="left">12</td>
+<td align="left">流失客户</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">536365</td>
+<td align="left">71053</td>
+<td align="left">WHITE METAL LANTERN</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">20.34</td>
+<td align="left">3</td>
+<td align="left">12</td>
+<td align="left">流失客户</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">536365</td>
+<td align="left">84406B</td>
+<td align="left">CREAM CUPID HEARTS COAT HANGER</td>
+<td align="left">8</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">2.75</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">22.00</td>
+<td align="left">3</td>
+<td align="left">12</td>
+<td align="left">流失客户</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">536365</td>
+<td align="left">84029G</td>
+<td align="left">KNITTED UNION FLAG HOT WATER BOTTLE</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">20.34</td>
+<td align="left">3</td>
+<td align="left">12</td>
+<td align="left">流失客户</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">536365</td>
+<td align="left">84029E</td>
+<td align="left">RED WOOLLY HOTTIE WHITE HEART.</td>
+<td align="left">6</td>
+<td align="left">2010-12-01 08:26:00</td>
+<td align="left">3.39</td>
+<td align="left">17850.0</td>
+<td align="left">United Kingdom</td>
+<td align="left">2011-12-10</td>
+<td align="left">373 days 15:34:00</td>
+<td align="left">20.34</td>
+<td align="left">3</td>
+<td align="left">12</td>
+<td align="left">流失客户</td>
+</tr>
+</tbody></table>
+<pre><code>by_c_t = new.groupby(&quot;客户类型&quot;)[&quot;total&quot;].sum().sort_values(ascending=False)
+by_c_t
+客户类型
+最佳客户      4106703.970
+大金主       2472418.943
+忠诚客户      1270195.150
+近流失客户      364926.870
+流失客户        86803.711
+流失廉价客户     -11011.550
+Name: total, dtype: float64
+datas = list(zip(by_c_t.index.to_list(), by_c_t.to_list()))
+datas
+[(&#39;最佳客户&#39;, 4106703.970000173),
+ (&#39;大金主&#39;, 2472418.9429999804),
+ (&#39;忠诚客户&#39;, 1270195.1499999189),
+ (&#39;近流失客户&#39;, 364926.870000011),
+ (&#39;流失客户&#39;, 86803.71099999893),
+ (&#39;流失廉价客户&#39;, -11011.549999999996)]
+</code></pre>
+<h3 id="b-可视化展示每一类用户消费额占总消费额的比例"><a href="#b-可视化展示每一类用户消费额占总消费额的比例" class="headerlink" title="b) 可视化展示每一类用户消费额占总消费额的比例"></a>b) 可视化展示每一类用户消费额占总消费额的比例</h3><pre><code>pie = create_pie(datas, &quot;饼图-客户销售额对比&quot;)
+pie.render_notebook()
+</code></pre>
+<p><img src="http://files.mdnice.com/user/21987/81c67dfb-da61-4f6f-b911-0f540e76f2d2.jpg" alt="img"></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/GrantEtude.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s1.328888.xyz/2022/06/04/W7Vg3.jpg" height=300 width=300></img>
+                    <p>曾粤</p>
+                    <span>I think,therefore I am</span>
+                    <dl>
+                        
+                        
+                            
+                                <dd>
+                                    <link rel="stylesheet" type="text/css" href="">
+                                    <a href="function link() { [native code] }" target="_blank"><span
+                                    class=" iconfont "></span></a>
+                                </dd>
+                            
+                            
+                            
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">10 <p>Articles</p></a></li>
+                    <li><a href="/categories">6 <p>Categories</p></a></li>
+                    <li><a href="/tags">9 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE%EF%BC%8C%E5%B9%B6%E4%B8%94%E5%AF%B9%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E4%BD%9C%E5%87%BA%E4%B8%80%E4%BA%9B%E8%B0%83%E6%95%B4%EF%BC%8C%E6%96%B9%E4%BE%BF%E5%90%8E%E7%BB%AD%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">读取数据，并且对数据格式作出一些调整，方便后续分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E6%98%9F%E6%9C%9F%E8%81%9A%E5%90%88%E6%80%BB%E9%94%80%E5%94%AE%E9%A2%9D"><span class="toc-number">2.</span> <span class="toc-text">按星期聚合总销售额</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B1%82%E5%87%BA%E5%90%84%E5%88%97%E7%9A%84%E5%9B%9B%E5%88%86%E4%BD%8D%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text">求出各列的四分位数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E5%AE%9A%E4%B9%89%EF%BC%8C%E5%88%B6%E5%AE%9A%E5%AF%B9%E5%AE%A2%E6%88%B7%E8%BF%9B%E8%A1%8C%E7%B1%BB%E5%9E%8B%E5%88%92%E5%88%86%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">根据定义，制定对客户进行类型划分的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#a%EF%BC%89%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B1%95%E7%A4%BA%E6%AF%8F%E4%B8%80%E7%B1%BB%E7%94%A8%E6%88%B7%E6%95%B0%E5%8D%A0%E6%80%BB%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B"><span class="toc-number">5.</span> <span class="toc-text">a）可视化展示每一类用户数占总数的比例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#b-%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B1%95%E7%A4%BA%E6%AF%8F%E4%B8%80%E7%B1%BB%E7%94%A8%E6%88%B7%E6%B6%88%E8%B4%B9%E9%A2%9D%E5%8D%A0%E6%80%BB%E6%B6%88%E8%B4%B9%E9%A2%9D%E7%9A%84%E6%AF%94%E4%BE%8B"><span class="toc-number">6.</span> <span class="toc-text">b) 可视化展示每一类用户消费额占总消费额的比例</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2022
+        <span class="gradient-text">
+            Zeng Yue
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.3" target="_blank" rel="noopener">v1.4.9.3</a></small>
+        
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['勇俭爱诚', '厚德博学，唯实求新'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>

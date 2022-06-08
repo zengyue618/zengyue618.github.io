@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>金融时间序列数据处理 - Hexo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="今天遇到一个关于金融背景的时间序列数据分析计算的需求，其中的分析处理方案非常具有代表性，所以分享给大家。数据大概长这个样子，其中Unnamed: 0这一列代表时间import numpy as np,"> 
+    <meta name="author" content="Zeng Yue"> 
+    <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = "7471325035"</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Hexo</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">金融时间序列数据处理</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('https://s1.328888.xyz/2022/06/04/WIr9R.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/数据分析"><b>「
+                    </b>数据分析<b> 」</b></a>
+                
+                November 10, 2021
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/11/10/%E9%87%91%E8%9E%8D%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" title="金融时间序列数据处理" class="">金融时间序列数据处理</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    13k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    12 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/pandas/" rel="tag">pandas</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h5 id="今天遇到一个关于金融背景的时间序列数据分析计算的需求，其中的分析处理方案非常具有代表性，所以分享给大家。"><a href="#今天遇到一个关于金融背景的时间序列数据分析计算的需求，其中的分析处理方案非常具有代表性，所以分享给大家。" class="headerlink" title="今天遇到一个关于金融背景的时间序列数据分析计算的需求，其中的分析处理方案非常具有代表性，所以分享给大家。"></a>今天遇到一个关于金融背景的时间序列数据分析计算的需求，其中的分析处理方案非常具有代表性，所以分享给大家。</h5><h5 id="数据大概长这个样子，其中Unnamed-0这一列代表时间"><a href="#数据大概长这个样子，其中Unnamed-0这一列代表时间" class="headerlink" title="数据大概长这个样子，其中Unnamed: 0这一列代表时间"></a>数据大概长这个样子，其中Unnamed: 0这一列代表时间</h5><pre><code class="python">import numpy as np
+import pandas as pd
+data = pd.read_excel(&quot;a1.xlsx&quot;)
+data.head(3)
+</code></pre>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>000016.SH</th>
+      <th>CBA02501.CS</th>
+      <th>000832.CSI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2016-01-04</td>
+      <td>2270.4609</td>
+      <td>171.8353</td>
+      <td>312.9428</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2016-01-05</td>
+      <td>2288.1127</td>
+      <td>171.5916</td>
+      <td>309.5110</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2016-01-06</td>
+      <td>2317.6465</td>
+      <td>171.6981</td>
+      <td>310.2719</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="客户需要按日、周、月、季度计算各列数据百分比变化率的协方差以及期望值。"><a href="#客户需要按日、周、月、季度计算各列数据百分比变化率的协方差以及期望值。" class="headerlink" title="客户需要按日、周、月、季度计算各列数据百分比变化率的协方差以及期望值。"></a>客户需要按日、周、月、季度计算各列数据百分比变化率的协方差以及期望值。</h5><h5 id="例如：按季度计算数据百分比变化率-x3D-（本季度最后一天－上一个季度的最后一天）-x2F-上一个季度的最后一天。"><a href="#例如：按季度计算数据百分比变化率-x3D-（本季度最后一天－上一个季度的最后一天）-x2F-上一个季度的最后一天。" class="headerlink" title="例如：按季度计算数据百分比变化率&#x3D;（本季度最后一天－上一个季度的最后一天）&#x2F;上一个季度的最后一天。"></a>例如：按季度计算数据百分比变化率&#x3D;（本季度最后一天－上一个季度的最后一天）&#x2F;上一个季度的最后一天。</h5><h5 id="核心问题就在于客户给的数据的时间列并不是完整的，需要先判断出哪一天是（周、月、季度）的最后一天，并且取出对应的数据。"><a href="#核心问题就在于客户给的数据的时间列并不是完整的，需要先判断出哪一天是（周、月、季度）的最后一天，并且取出对应的数据。" class="headerlink" title="核心问题就在于客户给的数据的时间列并不是完整的，需要先判断出哪一天是（周、月、季度）的最后一天，并且取出对应的数据。"></a>核心问题就在于客户给的数据的时间列并不是完整的，需要先判断出哪一天是（周、月、季度）的最后一天，并且取出对应的数据。</h5><h5 id="接下来就分享我的解决方案。"><a href="#接下来就分享我的解决方案。" class="headerlink" title="接下来就分享我的解决方案。"></a>接下来就分享我的解决方案。</h5><h5 id="一：通过Unnamed-0这一列计算出某一日期的年份以及当年是第几个季度、第几个月、第几个周。"><a href="#一：通过Unnamed-0这一列计算出某一日期的年份以及当年是第几个季度、第几个月、第几个周。" class="headerlink" title="一：通过Unnamed: 0这一列计算出某一日期的年份以及当年是第几个季度、第几个月、第几个周。"></a>一：通过Unnamed: 0这一列计算出某一日期的年份以及当年是第几个季度、第几个月、第几个周。</h5><pre><code class="python">data[&quot;year&quot;] = data[&#39;Unnamed: 0&#39;].apply(lambda x: x.year)
+data[&#39;month&#39;] = data[&#39;Unnamed: 0&#39;].apply(lambda x: x.month)
+data[&#39;week&#39;] = data[&#39;Unnamed: 0&#39;].apply(lambda x: x.week)
+data[&#39;quarter&#39;] = data[&#39;Unnamed: 0&#39;].apply(lambda x: x.quarter)
+</code></pre>
+<h5 id="二：通过上面计算得到的数据，按year、month分组聚合，得到按每年每月分组聚合的数据。同理得到每年每季度、每年每周的数据。"><a href="#二：通过上面计算得到的数据，按year、month分组聚合，得到按每年每月分组聚合的数据。同理得到每年每季度、每年每周的数据。" class="headerlink" title="二：通过上面计算得到的数据，按year、month分组聚合，得到按每年每月分组聚合的数据。同理得到每年每季度、每年每周的数据。"></a>二：通过上面计算得到的数据，按year、month分组聚合，得到按每年每月分组聚合的数据。同理得到每年每季度、每年每周的数据。</h5><pre><code class="python">month_grouped = data[&#39;Unnamed: 0&#39;].groupby([data[&#39;year&#39;], data[&#39;month&#39;]])
+week_grouped = data[&#39;Unnamed: 0&#39;].groupby([data[&#39;year&#39;], data[&#39;week&#39;]])
+quarter_grouped = data[&#39;Unnamed: 0&#39;].groupby([data[&#39;year&#39;], data[&#39;quarter&#39;]])
+</code></pre>
+<h5 id="三：通过上面的分组聚合数据，用max-函数取出最后一天数据"><a href="#三：通过上面的分组聚合数据，用max-函数取出最后一天数据" class="headerlink" title="三：通过上面的分组聚合数据，用max()函数取出最后一天数据"></a>三：通过上面的分组聚合数据，用max()函数取出最后一天数据</h5><pre><code class="python">month_last_day = pd.to_datetime(month_grouped.max().to_list())
+week_last_day = pd.to_datetime(week_grouped.max().to_list())
+quarter_last_day = pd.to_datetime(quarter_grouped.max().to_list())
+</code></pre>
+<h5 id="把时间列设为index"><a href="#把时间列设为index" class="headerlink" title="把时间列设为index"></a>把时间列设为index</h5><pre><code class="python">data.index = pd.to_datetime(data[&quot;Unnamed: 0&quot;])
+data.head(3)
+</code></pre>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>000016.SH</th>
+      <th>CBA02501.CS</th>
+      <th>000832.CSI</th>
+      <th>year</th>
+      <th>month</th>
+      <th>week</th>
+      <th>quarter</th>
+    </tr>
+    <tr>
+      <th>Unnamed: 0</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2016-01-04</th>
+      <td>2016-01-04</td>
+      <td>2270.4609</td>
+      <td>171.8353</td>
+      <td>312.9428</td>
+      <td>2016</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2016-01-05</th>
+      <td>2016-01-05</td>
+      <td>2288.1127</td>
+      <td>171.5916</td>
+      <td>309.5110</td>
+      <td>2016</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2016-01-06</th>
+      <td>2016-01-06</td>
+      <td>2317.6465</td>
+      <td>171.6981</td>
+      <td>310.2719</td>
+      <td>2016</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="删掉因计算中间数据而增加的列"><a href="#删掉因计算中间数据而增加的列" class="headerlink" title="删掉因计算中间数据而增加的列"></a>删掉因计算中间数据而增加的列</h5><pre><code class="python">data.drop([&#39;year&#39;, &#39;month&#39;, &quot;quarter&quot;, &quot;week&quot;, &quot;Unnamed: 0&quot;], axis=1, inplace=True)
+</code></pre>
+<h5 id="四：用计算得到的每季的最后一天数据为索引，生成一个全0的series"><a href="#四：用计算得到的每季的最后一天数据为索引，生成一个全0的series" class="headerlink" title="四：用计算得到的每季的最后一天数据为索引，生成一个全0的series"></a>四：用计算得到的每季的最后一天数据为索引，生成一个全0的series</h5><pre><code class="python">quarter_last_day_series = pd.Series(
+    [0 for _ in range(len(quarter_last_day))], 
+    index=quarter_last_day
+)
+</code></pre>
+<h5 id="这个series的作用就是跟data进行内连接，从而达到了取出相应日期数据的目的。"><a href="#这个series的作用就是跟data进行内连接，从而达到了取出相应日期数据的目的。" class="headerlink" title="这个series的作用就是跟data进行内连接，从而达到了取出相应日期数据的目的。"></a>这个series的作用就是跟data进行内连接，从而达到了取出相应日期数据的目的。</h5><pre><code class="python">selected_by_quarter = pd.concat(
+    [quarter_last_day_series, data], 
+    axis=1, join=&#39;inner&#39;
+).drop(0, axis=1)
+selected_by_quarter.head(3)
+</code></pre>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>000016.SH</th>
+      <th>CBA02501.CS</th>
+      <th>000832.CSI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2016-03-31</th>
+      <td>2156.5410</td>
+      <td>172.8271</td>
+      <td>295.1833</td>
+    </tr>
+    <tr>
+      <th>2016-06-30</th>
+      <td>2122.6330</td>
+      <td>174.1138</td>
+      <td>282.8972</td>
+    </tr>
+    <tr>
+      <th>2016-09-30</th>
+      <td>2177.3524</td>
+      <td>176.9656</td>
+      <td>294.4042</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="同理就可以取出其它日期的数据"><a href="#同理就可以取出其它日期的数据" class="headerlink" title="同理就可以取出其它日期的数据"></a>同理就可以取出其它日期的数据</h5><h5 id="计算平均值"><a href="#计算平均值" class="headerlink" title="计算平均值"></a>计算平均值</h5><pre><code class="python">np.array(
+    selected_by_quarter.mean()
+).reshape(3, -1)
+array([[2805.834556],
+       [ 190.929684],
+       [ 328.764932]])
+</code></pre>
+<h5 id="五：用pct-change-计算出百分比变化率"><a href="#五：用pct-change-计算出百分比变化率" class="headerlink" title="五：用pct_change()计算出百分比变化率"></a>五：用pct_change()计算出百分比变化率</h5><pre><code class="python">selected_by_quarter_pct = selected_by_quarter.pct_change().dropna()
+selected_by_quarter_pct.head(3)
+</code></pre>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>000016.SH</th>
+      <th>CBA02501.CS</th>
+      <th>000832.CSI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2016-06-30</th>
+      <td>-0.015723</td>
+      <td>0.007445</td>
+      <td>-0.041622</td>
+    </tr>
+    <tr>
+      <th>2016-09-30</th>
+      <td>0.025779</td>
+      <td>0.016379</td>
+      <td>0.040676</td>
+    </tr>
+    <tr>
+      <th>2016-12-30</th>
+      <td>0.050312</td>
+      <td>-0.018757</td>
+      <td>-0.037569</td>
+    </tr>
+  </tbody>
+</table>
+
+<pre><code class="python">selected_by_quarter_pct.cov()
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">000016.SH</th>
+<th align="left">CBA02501.CS</th>
+<th align="left">000832.CSI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">000016.SH</td>
+<td align="left">0.006911</td>
+<td align="left">-0.000556</td>
+<td align="left">0.001930</td>
+</tr>
+<tr>
+<td align="left">CBA02501.CS</td>
+<td align="left">-0.000556</td>
+<td align="left">0.000156</td>
+<td align="left">0.000132</td>
+</tr>
+<tr>
+<td align="left">000832.CSI</td>
+<td align="left">0.001930</td>
+<td align="left">0.000132</td>
+<td align="left">0.002710</td>
+</tr>
+</tbody></table>
+<h5 id="用cov-计算协方差-并且用-values-转化为numpy的array格式"><a href="#用cov-计算协方差-并且用-values-转化为numpy的array格式" class="headerlink" title="用cov()计算协方差,并且用.values 转化为numpy的array格式"></a>用cov()计算协方差,并且用.values 转化为numpy的array格式</h5><pre><code class="python">selected_by_quarter_pct.cov().values
+array([[ 0.00691068, -0.00055623,  0.00193013],
+       [-0.00055623,  0.00015612,  0.00013195],
+       [ 0.00193013,  0.00013195,  0.00271026]])
+selected_by_day_pct = data.pct_change().dropna()
+selected_by_day_pct.cov().values
+array([[ 1.45767216e-04, -1.84259700e-06,  5.16153366e-05],
+       [-1.84259700e-06,  9.07220432e-07, -1.19196633e-07],
+       [ 5.16153366e-05, -1.19196633e-07,  4.17346061e-05]])
+</code></pre>
+<h5 id="六：用面向对象的方式重构代码"><a href="#六：用面向对象的方式重构代码" class="headerlink" title="六：用面向对象的方式重构代码"></a>六：用面向对象的方式重构代码</h5><h5 id="了解了全流程之后就用类封装数据和计算逻辑"><a href="#了解了全流程之后就用类封装数据和计算逻辑" class="headerlink" title="了解了全流程之后就用类封装数据和计算逻辑"></a>了解了全流程之后就用类封装数据和计算逻辑</h5><pre><code class="python">import numpy as np
+import pandas as pd
+
+
+class RiskParity:
+ def __init__(self):
+  self.data = pd.read_excel(&quot;a1.xlsx&quot;)
+  self.data[&quot;year&quot;] = self.data[&#39;Unnamed: 0&#39;].apply(lambda x: x.year)
+  self.data[&#39;month&#39;] = self.data[&#39;Unnamed: 0&#39;].apply(lambda x: x.month)
+  self.data[&#39;week&#39;] = self.data[&#39;Unnamed: 0&#39;].apply(lambda x: x.week)
+  self.data[&#39;quarter&#39;] = self.data[&#39;Unnamed: 0&#39;].apply(lambda x: x.quarter)
+  self.data.index = pd.to_datetime(self.data[&quot;Unnamed: 0&quot;])
+
+ def __grouped(self, freq):
+  return self.data[&#39;Unnamed: 0&#39;].groupby([self.data[&#39;year&#39;], self.data[f&quot;&#123;freq&#125;&quot;]])
+
+ def __last_day(self, freq):
+  return pd.to_datetime(self.__grouped(freq).max().to_list())
+
+ def __calculate(self, columns, freq):
+  # 按给定频率计算协方差和期望
+  if freq == &quot;day&quot;:
+   selected_data_pct = self.data[columns].pct_change().dropna()
+   cov = selected_data_pct.cov().values
+   mean = np.array(selected_data_pct.mean()).reshape(len(columns), -1)
+  else:
+   last_day_series = pd.Series([0 for _ in range(len(self.__last_day(freq)))], index=self.__last_day(freq))
+   selected_data = pd.concat([last_day_series, self.data[columns]], axis=1, join=&#39;inner&#39;).drop(0, axis=1)
+   selected_data_pct = selected_data.pct_change().dropna()
+   cov = selected_data_pct.cov().values
+   mean = np.array(selected_data.mean()).reshape(len(columns), -1)
+  return cov, mean
+
+ def cov_and_mean(self, columns: list, freq=&quot;day&quot;) -&gt; np.array:
+  &quot;&quot;&quot;
+   columns : 你所需要计算显示的列名，例如 [&quot;000016.SH&quot;, &quot;CBA02501.CS&quot;, &quot;000832.CSI&quot;]
+   freq : 你所需要计算的频率，按天: day   按月: month   按周: week   按季: quarter
+  &quot;&quot;&quot;
+  freq_excepted = (&quot;day&quot;, &quot;month&quot;, &quot;week&quot;, &quot;quarter&quot;)
+  if freq not in freq_excepted:
+   print(&quot;请输入正确的freq&quot;)
+   return None
+  else:
+   return self.__calculate(columns, freq)
+
+
+if __name__ == &quot;__main__&quot;:
+ rp = RiskParity()
+ v, r = rp.cov_and_mean([&quot;000016.SH&quot;, &quot;CBA02501.CS&quot;, &quot;000832.CSI&quot;], freq=&quot;quarter&quot;)
+ print(v)
+ print(r)
+</code></pre>
+<h5 id="七：总结"><a href="#七：总结" class="headerlink" title="七：总结"></a>七：总结</h5><h5 id="这个需求的难点主要有两个方面，其一是如何从不完整的日期中挑选出每周、每月、每季度的最后一天；其二则是在给定时间序列的情况下，在原数据中取出相应日期的数据。"><a href="#这个需求的难点主要有两个方面，其一是如何从不完整的日期中挑选出每周、每月、每季度的最后一天；其二则是在给定时间序列的情况下，在原数据中取出相应日期的数据。" class="headerlink" title="这个需求的难点主要有两个方面，其一是如何从不完整的日期中挑选出每周、每月、每季度的最后一天；其二则是在给定时间序列的情况下，在原数据中取出相应日期的数据。"></a>这个需求的难点主要有两个方面，其一是如何从不完整的日期中挑选出每周、每月、每季度的最后一天；其二则是在给定时间序列的情况下，在原数据中取出相应日期的数据。</h5><h5 id="第一个问题的解决思路是通过（年、月）、（年、季度）这种双重的分组聚合，将每月、每季度的数据进行分割，之后取出每个分组的最后一条数据。"><a href="#第一个问题的解决思路是通过（年、月）、（年、季度）这种双重的分组聚合，将每月、每季度的数据进行分割，之后取出每个分组的最后一条数据。" class="headerlink" title="第一个问题的解决思路是通过（年、月）、（年、季度）这种双重的分组聚合，将每月、每季度的数据进行分割，之后取出每个分组的最后一条数据。"></a>第一个问题的解决思路是通过（年、月）、（年、季度）这种双重的分组聚合，将每月、每季度的数据进行分割，之后取出每个分组的最后一条数据。</h5><h5 id="第二个问题的解决思路是通过先生成以给定时间序列为index的任意一个series，然后用这个series进行内连接，以此就起到了筛选数据的效果"><a href="#第二个问题的解决思路是通过先生成以给定时间序列为index的任意一个series，然后用这个series进行内连接，以此就起到了筛选数据的效果" class="headerlink" title="第二个问题的解决思路是通过先生成以给定时间序列为index的任意一个series，然后用这个series进行内连接，以此就起到了筛选数据的效果"></a>第二个问题的解决思路是通过先生成以给定时间序列为index的任意一个series，然后用这个series进行内连接，以此就起到了筛选数据的效果</h5><h5 id="最后一点就是用面向对象的方式重构代码时，要明确需要为客户暴露哪些方法，哪些数据，并且选取相同逻辑的部分进行方法封装。"><a href="#最后一点就是用面向对象的方式重构代码时，要明确需要为客户暴露哪些方法，哪些数据，并且选取相同逻辑的部分进行方法封装。" class="headerlink" title="最后一点就是用面向对象的方式重构代码时，要明确需要为客户暴露哪些方法，哪些数据，并且选取相同逻辑的部分进行方法封装。"></a>最后一点就是用面向对象的方式重构代码时，要明确需要为客户暴露哪些方法，哪些数据，并且选取相同逻辑的部分进行方法封装。</h5>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/GrantEtude.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s1.328888.xyz/2022/06/04/W7Vg3.jpg" height=300 width=300></img>
+                    <p>曾粤</p>
+                    <span>I think,therefore I am</span>
+                    <dl>
+                        
+                        
+                            
+                                <dd>
+                                    <link rel="stylesheet" type="text/css" href="">
+                                    <a href="function link() { [native code] }" target="_blank"><span
+                                    class=" iconfont "></span></a>
+                                </dd>
+                            
+                            
+                            
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">10 <p>Articles</p></a></li>
+                    <li><a href="/categories">6 <p>Categories</p></a></li>
+                    <li><a href="/tags">9 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2022
+        <span class="gradient-text">
+            Zeng Yue
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.3" target="_blank" rel="noopener">v1.4.9.3</a></small>
+        
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['勇俭爱诚', '厚德博学，唯实求新'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>

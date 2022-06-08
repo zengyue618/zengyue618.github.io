@@ -1,0 +1,1012 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>基于随机森林填补缺失值 - Hexo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="众所周知，进行机器学习建模的第一步就是数据预处理，在数据预处理的过程中，处理缺失值则是关键一步。在数据集规模较小的情况下，如果对缺失值进行贸然的删除，则会导致本就不多的数据更为稀少。所以我们需要对缺,"> 
+    <meta name="author" content="Zeng Yue"> 
+    <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = "7471325035"</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Hexo</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">基于随机森林填补缺失值</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('https://s1.328888.xyz/2022/06/04/WIr9R.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/机器学习"><b>「
+                    </b>机器学习<b> 」</b></a>
+                
+                January 10, 2022
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/01/10/%E5%9F%BA%E4%BA%8E%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E5%A1%AB%E8%A1%A5%E7%BC%BA%E5%A4%B1%E5%80%BC/" title="基于随机森林填补缺失值" class="">基于随机森林填补缺失值</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    20k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    18 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="tag">随机森林</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h4 id="众所周知，进行机器学习建模的第一步就是数据预处理，在数据预处理的过程中，处理缺失值则是关键一步。在数据集规模较小的情况下，如果对缺失值进行贸然的删除，则会导致本就不多的数据更为稀少。所以我们需要对缺失值进行一定的填补。"><a href="#众所周知，进行机器学习建模的第一步就是数据预处理，在数据预处理的过程中，处理缺失值则是关键一步。在数据集规模较小的情况下，如果对缺失值进行贸然的删除，则会导致本就不多的数据更为稀少。所以我们需要对缺失值进行一定的填补。" class="headerlink" title="众所周知，进行机器学习建模的第一步就是数据预处理，在数据预处理的过程中，处理缺失值则是关键一步。在数据集规模较小的情况下，如果对缺失值进行贸然的删除，则会导致本就不多的数据更为稀少。所以我们需要对缺失值进行一定的填补。"></a>众所周知，进行机器学习建模的第一步就是数据预处理，在数据预处理的过程中，处理缺失值则是关键一步。在数据集规模较小的情况下，如果对缺失值进行贸然的删除，则会导致本就不多的数据更为稀少。所以我们需要对缺失值进行一定的填补。</h4><h4 id="在填补的方法中，有直接用0填补的，有用均值的，有用中位数的，还有用众数的"><a href="#在填补的方法中，有直接用0填补的，有用均值的，有用中位数的，还有用众数的" class="headerlink" title="在填补的方法中，有直接用0填补的，有用均值的，有用中位数的，还有用众数的"></a>在填补的方法中，有直接用0填补的，有用均值的，有用中位数的，还有用众数的</h4><h4 id="这些方法虽然简单，但是对数据集的还原程度不高，所以今天为大家介绍如何使用随机森林的方法预测并且填补缺失值"><a href="#这些方法虽然简单，但是对数据集的还原程度不高，所以今天为大家介绍如何使用随机森林的方法预测并且填补缺失值" class="headerlink" title="这些方法虽然简单，但是对数据集的还原程度不高，所以今天为大家介绍如何使用随机森林的方法预测并且填补缺失值"></a>这些方法虽然简单，但是对数据集的还原程度不高，所以今天为大家介绍如何使用随机森林的方法预测并且填补缺失值</h4><h4 id="我们先来看看这个数据集"><a href="#我们先来看看这个数据集" class="headerlink" title="我们先来看看这个数据集"></a>我们先来看看这个数据集</h4><p><img src="http://files.mdnice.com/user/21987/e4eae558-6f69-41f7-877d-84656998f4e6.jpg" alt="img"></p>
+<h4 id="它有许多缺失值，我们先对这个数据集进行探索"><a href="#它有许多缺失值，我们先对这个数据集进行探索" class="headerlink" title="它有许多缺失值，我们先对这个数据集进行探索"></a>它有许多缺失值，我们先对这个数据集进行探索</h4><pre><code class="python">import numpy as np
+import pandas as pd
+data = pd.read_csv(&quot;test-2.csv&quot;)
+</code></pre>
+<h2 id="观察数据"><a href="#观察数据" class="headerlink" title="观察数据"></a>观察数据</h2><pre><code>data
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">year</th>
+<th align="left">selling_price</th>
+<th align="left">km_driven</th>
+<th align="left">fuel</th>
+<th align="left">seller_type</th>
+<th align="left">transmission</th>
+<th align="left">owner</th>
+<th align="left">mileage</th>
+<th align="left">engine</th>
+<th align="left">seats</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">2014</td>
+<td align="left">450000</td>
+<td align="left">145500</td>
+<td align="left">Diesel</td>
+<td align="left">Individual</td>
+<td align="left">Manual</td>
+<td align="left">First Owner</td>
+<td align="left">23.40</td>
+<td align="left">1248.0</td>
+<td align="left">5.0</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">2014</td>
+<td align="left">370000</td>
+<td align="left">120000</td>
+<td align="left">Diesel</td>
+<td align="left">Individual</td>
+<td align="left">Manual</td>
+<td align="left">Second Owner</td>
+<td align="left">21.14</td>
+<td align="left">1498.0</td>
+<td align="left">5.0</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">2006</td>
+<td align="left">158000</td>
+<td align="left">140000</td>
+<td align="left">Petrol</td>
+<td align="left">Individual</td>
+<td align="left">Manual</td>
+<td align="left">Third Owner</td>
+<td align="left">17.70</td>
+<td align="left">1497.0</td>
+<td align="left">5.0</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">2010</td>
+<td align="left">225000</td>
+<td align="left">127000</td>
+<td align="left">Diesel</td>
+<td align="left">Individual</td>
+<td align="left">Manual</td>
+<td align="left">First Owner</td>
+<td align="left">23.00</td>
+<td align="left">1396.0</td>
+<td align="left">5.0</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">2007</td>
+<td align="left">130000</td>
+<td align="left">120000</td>
+<td align="left">Petrol</td>
+<td align="left">Individual</td>
+<td align="left">Manual</td>
+<td align="left">First Owner</td>
+<td align="left">16.10</td>
+<td align="left">1298.0</td>
+<td align="left">5.0</td>
+</tr>
+<tr>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+</tr>
+<tr>
+<td align="left">94</td>
+<td align="left">2009</td>
+<td align="left">175000</td>
+<td align="left">55500</td>
+<td align="left">Petrol</td>
+<td align="left">Dealer</td>
+<td align="left">Manual</td>
+<td align="left">First Owner</td>
+<td align="left">18.20</td>
+<td align="left">998.0</td>
+<td align="left">5.0</td>
+</tr>
+<tr>
+<td align="left">95</td>
+<td align="left">2013</td>
+<td align="left">525000</td>
+<td align="left">61500</td>
+<td align="left">Petrol</td>
+<td align="left">Dealer</td>
+<td align="left">Manual</td>
+<td align="left">First Owner</td>
+<td align="left">18.50</td>
+<td align="left">1197.0</td>
+<td align="left">5.0</td>
+</tr>
+<tr>
+<td align="left">96</td>
+<td align="left">2016</td>
+<td align="left">600000</td>
+<td align="left">150000</td>
+<td align="left">Diesel</td>
+<td align="left">Individual</td>
+<td align="left">Manual</td>
+<td align="left">First Owner</td>
+<td align="left">26.59</td>
+<td align="left">1248.0</td>
+<td align="left">5.0</td>
+</tr>
+<tr>
+<td align="left">97</td>
+<td align="left">2016</td>
+<td align="left">565000</td>
+<td align="left">72000</td>
+<td align="left">Petrol</td>
+<td align="left">Dealer</td>
+<td align="left">Automatic</td>
+<td align="left">First Owner</td>
+<td align="left">19.10</td>
+<td align="left">1197.0</td>
+<td align="left">5.0</td>
+</tr>
+<tr>
+<td align="left">98</td>
+<td align="left">2008</td>
+<td align="left">120000</td>
+<td align="left">68000</td>
+<td align="left">Petrol</td>
+<td align="left">Dealer</td>
+<td align="left">Manual</td>
+<td align="left">Third Owner</td>
+<td align="left">19.70</td>
+<td align="left">796.0</td>
+<td align="left">5.0</td>
+</tr>
+</tbody></table>
+<p>99 rows × 10 columns</p>
+<pre><code>data.info()
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 99 entries, 0 to 98
+Data columns (total 10 columns):
+ #   Column         Non-Null Count  Dtype  
+---  ------         --------------  -----  
+ 0   year           99 non-null     int64  
+ 1   selling_price  99 non-null     int64  
+ 2   km_driven      99 non-null     int64  
+ 3   fuel           99 non-null     object 
+ 4   seller_type    99 non-null     object 
+ 5   transmission   99 non-null     object 
+ 6   owner          99 non-null     object 
+ 7   mileage        94 non-null     float64
+ 8   engine         96 non-null     float64
+ 9   seats          94 non-null     float64
+dtypes: float64(3), int64(3), object(4)
+memory usage: 7.9+ KB
+</code></pre>
+<h1 id="只有mileage、-engine-、seats有缺失值，其余都完整"><a href="#只有mileage、-engine-、seats有缺失值，其余都完整" class="headerlink" title="只有mileage、 engine 、seats有缺失值，其余都完整"></a>只有mileage、 engine 、seats有缺失值，其余都完整</h1><h2 id="重点关注文本数据"><a href="#重点关注文本数据" class="headerlink" title="重点关注文本数据"></a>重点关注文本数据</h2><pre><code>data[&quot;fuel&quot;].value_counts()
+Petrol    48
+Diesel    48
+LPG        2
+CNG        1
+Name: fuel, dtype: int64
+data[&quot;seller_type&quot;].value_counts()
+Individual    65
+Dealer        34
+Name: seller_type, dtype: int64
+data[&quot;transmission&quot;].value_counts()
+Manual       87
+Automatic    12
+Name: transmission, dtype: int64
+data[&quot;owner&quot;].value_counts()
+First Owner     69
+Second Owner    26
+Third Owner      4
+Name: owner, dtype: int64
+</code></pre>
+<h4 id="对文本数据，一般采用onehot编码或者label编码"><a href="#对文本数据，一般采用onehot编码或者label编码" class="headerlink" title="对文本数据，一般采用onehot编码或者label编码"></a>对文本数据，一般采用onehot编码或者label编码</h4><h4 id="从语义上看owner这个属性的值是有明显的定序特征，不宜采用onehot编码，而其余都是分类属性，并且属性值的种类不多"><a href="#从语义上看owner这个属性的值是有明显的定序特征，不宜采用onehot编码，而其余都是分类属性，并且属性值的种类不多" class="headerlink" title="从语义上看owner这个属性的值是有明显的定序特征，不宜采用onehot编码，而其余都是分类属性，并且属性值的种类不多"></a>从语义上看owner这个属性的值是有明显的定序特征，不宜采用onehot编码，而其余都是分类属性，并且属性值的种类不多</h4><h4 id="不会对随机森林算法有过度的负面作用，所以可以采用onehot编码"><a href="#不会对随机森林算法有过度的负面作用，所以可以采用onehot编码" class="headerlink" title="不会对随机森林算法有过度的负面作用，所以可以采用onehot编码"></a>不会对随机森林算法有过度的负面作用，所以可以采用onehot编码</h4><pre><code>def func(x: str) -&gt; int:
+    if x == &quot;First Owner&quot;:
+        return 1
+    elif x == &quot;Second Owner&quot;:
+        return 2
+    elif x == &quot;Third Owner&quot;:
+        return 3
+</code></pre>
+<h2 id="对owner进行label编码"><a href="#对owner进行label编码" class="headerlink" title="对owner进行label编码"></a>对owner进行label编码</h2><pre><code>data[&quot;owner&quot;].apply(func)
+data[&quot;owner&quot;].value_counts()
+First Owner     69
+Second Owner    26
+Third Owner      4
+Name: owner, dtype: int64
+</code></pre>
+<h2 id="对其余文本属性，统一使用get-dummies方法进行onehot编码"><a href="#对其余文本属性，统一使用get-dummies方法进行onehot编码" class="headerlink" title="对其余文本属性，统一使用get_dummies方法进行onehot编码"></a>对其余文本属性，统一使用get_dummies方法进行onehot编码</h2><pre><code>data = pd.get_dummies(data)
+data
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">year</th>
+<th align="left">selling_price</th>
+<th align="left">km_driven</th>
+<th align="left">mileage</th>
+<th align="left">engine</th>
+<th align="left">seats</th>
+<th align="left">fuel_CNG</th>
+<th align="left">fuel_Diesel</th>
+<th align="left">fuel_LPG</th>
+<th align="left">fuel_Petrol</th>
+<th align="left">seller_type_Dealer</th>
+<th align="left">seller_type_Individual</th>
+<th align="left">transmission_Automatic</th>
+<th align="left">transmission_Manual</th>
+<th align="left">owner_First Owner</th>
+<th align="left">owner_Second Owner</th>
+<th align="left">owner_Third Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">2014</td>
+<td align="left">450000</td>
+<td align="left">145500</td>
+<td align="left">23.40</td>
+<td align="left">1248.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">2014</td>
+<td align="left">370000</td>
+<td align="left">120000</td>
+<td align="left">21.14</td>
+<td align="left">1498.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">2006</td>
+<td align="left">158000</td>
+<td align="left">140000</td>
+<td align="left">17.70</td>
+<td align="left">1497.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">2010</td>
+<td align="left">225000</td>
+<td align="left">127000</td>
+<td align="left">23.00</td>
+<td align="left">1396.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">2007</td>
+<td align="left">130000</td>
+<td align="left">120000</td>
+<td align="left">16.10</td>
+<td align="left">1298.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+</tr>
+<tr>
+<td align="left">94</td>
+<td align="left">2009</td>
+<td align="left">175000</td>
+<td align="left">55500</td>
+<td align="left">18.20</td>
+<td align="left">998.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">95</td>
+<td align="left">2013</td>
+<td align="left">525000</td>
+<td align="left">61500</td>
+<td align="left">18.50</td>
+<td align="left">1197.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">96</td>
+<td align="left">2016</td>
+<td align="left">600000</td>
+<td align="left">150000</td>
+<td align="left">26.59</td>
+<td align="left">1248.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">97</td>
+<td align="left">2016</td>
+<td align="left">565000</td>
+<td align="left">72000</td>
+<td align="left">19.10</td>
+<td align="left">1197.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">98</td>
+<td align="left">2008</td>
+<td align="left">120000</td>
+<td align="left">68000</td>
+<td align="left">19.70</td>
+<td align="left">796.0</td>
+<td align="left">5.0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+</tbody></table>
+<p>99 rows × 17 columns</p>
+<h2 id="查看编码后的数据"><a href="#查看编码后的数据" class="headerlink" title="查看编码后的数据"></a>查看编码后的数据</h2><pre><code>data.info()
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 99 entries, 0 to 98
+Data columns (total 17 columns):
+ #   Column                  Non-Null Count  Dtype  
+---  ------                  --------------  -----  
+ 0   year                    99 non-null     int64  
+ 1   selling_price           99 non-null     int64  
+ 2   km_driven               99 non-null     int64  
+ 3   mileage                 94 non-null     float64
+ 4   engine                  96 non-null     float64
+ 5   seats                   94 non-null     float64
+ 6   fuel_CNG                99 non-null     uint8  
+ 7   fuel_Diesel             99 non-null     uint8  
+ 8   fuel_LPG                99 non-null     uint8  
+ 9   fuel_Petrol             99 non-null     uint8  
+ 10  seller_type_Dealer      99 non-null     uint8  
+ 11  seller_type_Individual  99 non-null     uint8  
+ 12  transmission_Automatic  99 non-null     uint8  
+ 13  transmission_Manual     99 non-null     uint8  
+ 14  owner_First Owner       99 non-null     uint8  
+ 15  owner_Second Owner      99 non-null     uint8  
+ 16  owner_Third Owner       99 non-null     uint8  
+dtypes: float64(3), int64(3), uint8(11)
+memory usage: 5.8 KB
+</code></pre>
+<h2 id="对每一列属性的缺失值个数进行求和统计"><a href="#对每一列属性的缺失值个数进行求和统计" class="headerlink" title="对每一列属性的缺失值个数进行求和统计"></a>对每一列属性的缺失值个数进行求和统计</h2><pre><code>data.isnull().sum(axis=0)
+year                      0
+selling_price             0
+km_driven                 0
+mileage                   5
+engine                    3
+seats                     5
+fuel_CNG                  0
+fuel_Diesel               0
+fuel_LPG                  0
+fuel_Petrol               0
+seller_type_Dealer        0
+seller_type_Individual    0
+transmission_Automatic    0
+transmission_Manual       0
+owner_First Owner         0
+owner_Second Owner        0
+owner_Third Owner         0
+dtype: int64
+</code></pre>
+<h2 id="随机森林算法填充缺失值"><a href="#随机森林算法填充缺失值" class="headerlink" title="随机森林算法填充缺失值"></a>随机森林算法填充缺失值</h2><h3 id="先填充缺失值较少的的列，之后再填多的"><a href="#先填充缺失值较少的的列，之后再填多的" class="headerlink" title="先填充缺失值较少的的列，之后再填多的"></a>先填充缺失值较少的的列，之后再填多的</h3><h4 id="原理：将要填补的列作为目标列，其余列作为属性列，用随机森林预测目标列的值进行填充"><a href="#原理：将要填补的列作为目标列，其余列作为属性列，用随机森林预测目标列的值进行填充" class="headerlink" title="原理：将要填补的列作为目标列，其余列作为属性列，用随机森林预测目标列的值进行填充"></a>原理：将要填补的列作为目标列，其余列作为属性列，用随机森林预测目标列的值进行填充</h4><h4 id="用非空的行作为训练集，空的行作为测试集，训练集中的数据有空值，则先用0填充"><a href="#用非空的行作为训练集，空的行作为测试集，训练集中的数据有空值，则先用0填充" class="headerlink" title="用非空的行作为训练集，空的行作为测试集，训练集中的数据有空值，则先用0填充"></a>用非空的行作为训练集，空的行作为测试集，训练集中的数据有空值，则先用0填充</h4><pre><code># 引入随机森林模型和填补缺失值的模型
+from sklearn.impute import SimpleImputer
+from sklearn.ensemble import RandomForestRegressor
+</code></pre>
+<h4 id="首先去除特定的列得到属性列，记为X；选取特定的列作为目标列，记为Y"><a href="#首先去除特定的列得到属性列，记为X；选取特定的列作为目标列，记为Y" class="headerlink" title="首先去除特定的列得到属性列，记为X；选取特定的列作为目标列，记为Y"></a>首先去除特定的列得到属性列，记为X；选取特定的列作为目标列，记为Y</h4><h4 id="在得到的属性列中，用0填补缺失值"><a href="#在得到的属性列中，用0填补缺失值" class="headerlink" title="在得到的属性列中，用0填补缺失值"></a>在得到的属性列中，用0填补缺失值</h4><h4 id="在目标列中选取非空的行的index作为选取训练集的依据，空行的index作为测试集的依据"><a href="#在目标列中选取非空的行的index作为选取训练集的依据，空行的index作为测试集的依据" class="headerlink" title="在目标列中选取非空的行的index作为选取训练集的依据，空行的index作为测试集的依据"></a>在目标列中选取非空的行的index作为选取训练集的依据，空行的index作为测试集的依据</h4><h4 id="这样就可以在X-Y中得到训练集和测试集了"><a href="#这样就可以在X-Y中得到训练集和测试集了" class="headerlink" title="这样就可以在X,Y中得到训练集和测试集了"></a>这样就可以在X,Y中得到训练集和测试集了</h4><h4 id="有了训练集就把它们丢到随机森林训练，然后用训练好的模型预测测试集中的数据得到预测值"><a href="#有了训练集就把它们丢到随机森林训练，然后用训练好的模型预测测试集中的数据得到预测值" class="headerlink" title="有了训练集就把它们丢到随机森林训练，然后用训练好的模型预测测试集中的数据得到预测值"></a>有了训练集就把它们丢到随机森林训练，然后用训练好的模型预测测试集中的数据得到预测值</h4><h4 id="最后将预测值填到相应的位置中"><a href="#最后将预测值填到相应的位置中" class="headerlink" title="最后将预测值填到相应的位置中"></a>最后将预测值填到相应的位置中</h4><pre><code>for name in [&quot;engine&quot;, &quot;mileage&quot;, &quot;seats&quot;]:
+    X = data.drop(columns=f&quot;&#123;name&#125;&quot;)
+    Y = data.loc[:, f&quot;&#123;name&#125;&quot;]
+    X_0 = SimpleImputer(missing_values=np.nan, strategy=&quot;constant&quot;).fit_transform(X)
+    y_train = Y[Y.notnull()]
+    y_test = Y[Y.isnull()]
+    x_train = X_0[y_train.index, :]
+    x_test = X_0[y_test.index, :]
+
+    rfc = RandomForestRegressor(n_estimators=100)
+    rfc = rfc.fit(x_train, y_train)
+    y_predict = rfc.predict(x_test)
+
+    data.loc[Y.isnull(), f&quot;&#123;name&#125;&quot;] = y_predict
+</code></pre>
+<h2 id="查看填充后的数据"><a href="#查看填充后的数据" class="headerlink" title="查看填充后的数据"></a>查看填充后的数据</h2><pre><code>data.info()
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 99 entries, 0 to 98
+Data columns (total 17 columns):
+ #   Column                  Non-Null Count  Dtype  
+---  ------                  --------------  -----  
+ 0   year                    99 non-null     int64  
+ 1   selling_price           99 non-null     int64  
+ 2   km_driven               99 non-null     int64  
+ 3   mileage                 99 non-null     float64
+ 4   engine                  99 non-null     float64
+ 5   seats                   99 non-null     float64
+ 6   fuel_CNG                99 non-null     uint8  
+ 7   fuel_Diesel             99 non-null     uint8  
+ 8   fuel_LPG                99 non-null     uint8  
+ 9   fuel_Petrol             99 non-null     uint8  
+ 10  seller_type_Dealer      99 non-null     uint8  
+ 11  seller_type_Individual  99 non-null     uint8  
+ 12  transmission_Automatic  99 non-null     uint8  
+ 13  transmission_Manual     99 non-null     uint8  
+ 14  owner_First Owner       99 non-null     uint8  
+ 15  owner_Second Owner      99 non-null     uint8  
+ 16  owner_Third Owner       99 non-null     uint8  
+dtypes: float64(3), int64(3), uint8(11)
+memory usage: 5.8 KB
+</code></pre>
+<h3 id="可以发现原有的缺失值已经被填好了"><a href="#可以发现原有的缺失值已经被填好了" class="headerlink" title="可以发现原有的缺失值已经被填好了"></a>可以发现原有的缺失值已经被填好了</h3><h2 id="最后把结果导出为excel文件"><a href="#最后把结果导出为excel文件" class="headerlink" title="最后把结果导出为excel文件"></a>最后把结果导出为excel文件</h2><pre><code>data.to_excel(&quot;test-2(填补后).xlsx&quot;)
+</code></pre>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/GrantEtude.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s1.328888.xyz/2022/06/04/W7Vg3.jpg" height=300 width=300></img>
+                    <p>曾粤</p>
+                    <span>I think,therefore I am</span>
+                    <dl>
+                        
+                        
+                            
+                                <dd>
+                                    <link rel="stylesheet" type="text/css" href="">
+                                    <a href="function link() { [native code] }" target="_blank"><span
+                                    class=" iconfont "></span></a>
+                                </dd>
+                            
+                            
+                            
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">10 <p>Articles</p></a></li>
+                    <li><a href="/categories">6 <p>Categories</p></a></li>
+                    <li><a href="/tags">9 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E6%95%B0%E6%8D%AE"><span class="toc-number">1.</span> <span class="toc-text">观察数据</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%AA%E6%9C%89mileage%E3%80%81-engine-%E3%80%81seats%E6%9C%89%E7%BC%BA%E5%A4%B1%E5%80%BC%EF%BC%8C%E5%85%B6%E4%BD%99%E9%83%BD%E5%AE%8C%E6%95%B4"><span class="toc-number"></span> <span class="toc-text">只有mileage、 engine 、seats有缺失值，其余都完整</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E7%82%B9%E5%85%B3%E6%B3%A8%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE"><span class="toc-number">1.</span> <span class="toc-text">重点关注文本数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9owner%E8%BF%9B%E8%A1%8Clabel%E7%BC%96%E7%A0%81"><span class="toc-number">2.</span> <span class="toc-text">对owner进行label编码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E5%85%B6%E4%BD%99%E6%96%87%E6%9C%AC%E5%B1%9E%E6%80%A7%EF%BC%8C%E7%BB%9F%E4%B8%80%E4%BD%BF%E7%94%A8get-dummies%E6%96%B9%E6%B3%95%E8%BF%9B%E8%A1%8Conehot%E7%BC%96%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text">对其余文本属性，统一使用get_dummies方法进行onehot编码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%BC%96%E7%A0%81%E5%90%8E%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-number">4.</span> <span class="toc-text">查看编码后的数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E6%AF%8F%E4%B8%80%E5%88%97%E5%B1%9E%E6%80%A7%E7%9A%84%E7%BC%BA%E5%A4%B1%E5%80%BC%E4%B8%AA%E6%95%B0%E8%BF%9B%E8%A1%8C%E6%B1%82%E5%92%8C%E7%BB%9F%E8%AE%A1"><span class="toc-number">5.</span> <span class="toc-text">对每一列属性的缺失值个数进行求和统计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E7%AE%97%E6%B3%95%E5%A1%AB%E5%85%85%E7%BC%BA%E5%A4%B1%E5%80%BC"><span class="toc-number">6.</span> <span class="toc-text">随机森林算法填充缺失值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E5%A1%AB%E5%85%85%E7%BC%BA%E5%A4%B1%E5%80%BC%E8%BE%83%E5%B0%91%E7%9A%84%E7%9A%84%E5%88%97%EF%BC%8C%E4%B9%8B%E5%90%8E%E5%86%8D%E5%A1%AB%E5%A4%9A%E7%9A%84"><span class="toc-number">6.1.</span> <span class="toc-text">先填充缺失值较少的的列，之后再填多的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%A1%AB%E5%85%85%E5%90%8E%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-number">7.</span> <span class="toc-text">查看填充后的数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E5%8E%9F%E6%9C%89%E7%9A%84%E7%BC%BA%E5%A4%B1%E5%80%BC%E5%B7%B2%E7%BB%8F%E8%A2%AB%E5%A1%AB%E5%A5%BD%E4%BA%86"><span class="toc-number">7.1.</span> <span class="toc-text">可以发现原有的缺失值已经被填好了</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E6%8A%8A%E7%BB%93%E6%9E%9C%E5%AF%BC%E5%87%BA%E4%B8%BAexcel%E6%96%87%E4%BB%B6"><span class="toc-number">8.</span> <span class="toc-text">最后把结果导出为excel文件</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2022
+        <span class="gradient-text">
+            Zeng Yue
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.3" target="_blank" rel="noopener">v1.4.9.3</a></small>
+        
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['勇俭爱诚', '厚德博学，唯实求新'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>
