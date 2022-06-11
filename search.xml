@@ -252,6 +252,81 @@
     </entry>
     
     
+    
+    <entry>
+      <title>快速选择学习笔记</title>
+      <link href="/2021/06/11/%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+      <url>/2021/06/11/%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="快速选择算法学习笔记"><a href="#快速选择算法学习笔记" class="headerlink" title="快速选择算法学习笔记"></a>快速选择算法学习笔记</h1><h5 id="找到第K小的数"><a href="#找到第K小的数" class="headerlink" title="找到第K小的数"></a>找到第K小的数</h5><h3 id="一：思想"><a href="#一：思想" class="headerlink" title="一：思想"></a>一：思想</h3><p>和快排的思想类似，先在中点找到一个基准值pivot，把 &lt;&#x3D; pivot的移到数组左边，把 &gt;&#x3D; pivot的移到右边。把数组分成两段，左边一段都是比较小的，右边一段都是比较大的。</p><p>接下来，判断一下目标值在左边还是右边，如果在左边就去递归左边，右边就递归右边，递归中止条件是只有一个数。</p><h3 id="二：-代码实现"><a href="#二：-代码实现" class="headerlink" title="二： 代码实现"></a>二： 代码实现</h3><pre><code class="java">public class Solution &#123;    public int kthSmallestElement(int k, int[] nums) &#123;        if(nums == null) &#123;            return -1;        &#125;        return quickSelect(nums, 0, nums.length - 1, k);    &#125;        private int quickSelect(int[] nums, int start, int end, int k) &#123;        if(start == end) &#123;            return nums[start];        &#125;                int left = start, right = end;        int pivot = nums[(left + right) / 2];                while(left &lt;= right) &#123;            while(left &lt;= right &amp;&amp; nums[left] &lt; pivot) &#123;                left++;            &#125;            while(left &lt;= right &amp;&amp; nums[r] &gt; pivot) &#123;                right--;            &#125;            if(left &lt;= right) &#123;                int temp = nums[left];                num[left] = nums[right];                nums[right] = nums[left];                left++;                right--;            &#125;        &#125;        # 此时两种情况：[..][...] 和[..]num[..]                    # right前的都 &lt;= pivot，left后都 &gt;= pivot，如果有num，num == pivot                # start + k - 1是从start到end这段区间中，第k小的元素经排序后的下标                # 如果排序后的下标没超过左边界 right, 就说明目标逃不出[start: right+1]        # 化归为[start: right+1]区间中找第k小元素        if(start + k - 1 &lt;= right) &#123;            return quickSelect(nums, start, right, k);        &#125;        # 如果排序后的下标超过了右边界，说明目标在[left: end+1]                       # 此时化归为[left: end+1]区间中找第k - (left - start)小元素的问题        # 因为把左边的元素全扔了，左边的元素一共(left - start)个        if(start + k - 1 &gt;= left) &#123;            return quickSelect(nums, left, end, k - (left - start));        &#125;        如果排序的下标不属于上面的情况，那么意味着正中num        return nums[right + 1];    &#125;&#125;</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据结构与算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 排序算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>归并排序学习笔记</title>
+      <link href="/2021/06/10/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+      <url>/2021/06/10/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="归并排序学习笔记"><a href="#归并排序学习笔记" class="headerlink" title="归并排序学习笔记"></a>归并排序学习笔记</h1><h3 id="一：思想"><a href="#一：思想" class="headerlink" title="一：思想"></a>一：思想</h3><p>把一个数组对半分，左右两边递归处理，直到区域只剩下一个元素。</p><p>区域只剩下一个元素了，必然是有序的，接下来就是回溯递归栈，完成有序数组的合并。</p><h3 id="二：代码实现"><a href="#二：代码实现" class="headerlink" title="二：代码实现"></a>二：代码实现</h3><pre><code class="java">public class Solution &#123;    public void sortIntegers(int[] A) &#123;        if(A == null || A.length == 0) return;                int[] temp = new int[A.length];                mergeSort(A, 0, A.length - 1, temp);    &#125;        # 类似二叉树的后序遍历    private void mergeSort(int[] A, int start, int end, int[] temp) &#123;        if(start &gt;= end) return;        mergeSort(A, start, (start + end) / 2, temp);        mergeSort(A, (start + end) / 2 + 1, end, temp);        merge(A, start, end, temp);        # 完成merge后，就代表着[start: end+1]已经有序了，返回到上一层递归中    &#125;        # 对两段有序数组进行合并    private void merge(int[] A, int start, int end, int[] temp) &#123;        int middle = (start + end) / 2;        int leftIndex = start, rightIndex = middle + 1;                int index = leftIndex;        while(leftIndex &lt;= middle &amp;&amp; rightIndex &lt;= end) &#123;            if(A[leftIndex] &lt; A[rightIndex]) &#123;                temp[index++] = A[leftIndex++];            &#125;            else temp[index++] = A[rightIndex++];        &#125;                while(leftIndex &lt;= middle) temp[index++] = A[leftIndex++];        while(rightIndex &lt;= end) temp[index++] = A[rightIndex++];                # temp作为临时存储空间，用于放置合并有序数组过程的中间结果        # 最后，temp存放着[start: end+1]有序数组，反过来赋值给A，完成原地排序。        for(int i = start; i &lt;= end; i++) A[i] = temp[i];            &#125;&#125;</code></pre><h3 id="三：注意事项"><a href="#三：注意事项" class="headerlink" title="三：注意事项"></a>三：注意事项</h3><ol><li>temp数组的申请内存操作要放在最开始，然后作为参数传到递归函数内。</li></ol><h3 id="四：与快速排序的比较"><a href="#四：与快速排序的比较" class="headerlink" title="四：与快速排序的比较"></a>四：与快速排序的比较</h3><p>时间复杂度上：快排是不严格的O(NlogN)，而归并是严格的O(NlogN)。原因是快排的过程中子问题的规模并不是完全对半分，具体的规模划分依赖于基准值的选取。子问题规模有可能是[…….] 和 [..]，不均匀。而归并则是严格的对半分。</p><p>空间复杂度上：快排O(1)，归并O(N)。</p><p>稳定性上：快排非稳定，归并稳定。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据结构与算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 排序算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>快速排序学习笔记</title>
+      <link href="/2021/06/10/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+      <url>/2021/06/10/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="快速排序学习笔记"><a href="#快速排序学习笔记" class="headerlink" title="快速排序学习笔记"></a>快速排序学习笔记</h1><h3 id="一：思想"><a href="#一：思想" class="headerlink" title="一：思想"></a>一：思想</h3><p>在数组中随机挑出一个数，作为基准值p。</p><p>用一个<strong>分组函数</strong>将数组中**&lt;&#x3D;<strong>基准值p的元素挪到基准值的左半部分，**&gt;&#x3D;</strong> 基准值p的元素挪到右半部分。</p><p>在左半部分和右半部分递归上述过程。</p><p><strong>重点：理解为什么是&lt;&#x3D;和&gt;&#x3D;，为什么取等</strong></p><p>答：因为当出现数组中很多元素都是一样的情况，举个极端例子[1,1,…..1,1]。</p><p>如果是&lt;和&gt;&#x3D;，或者是&lt;&#x3D;和&gt;，那么此时就会出现一边没有没有元素的情况，不平衡。</p><h3 id="二：代码实现"><a href="#二：代码实现" class="headerlink" title="二：代码实现"></a>二：代码实现</h3><pre><code class="java">public class Solution &#123;        private void quickSort(int[] A, int start, int end) &#123;        if (start &gt;= end) return;                int left = start, right = end;                int pivot = A[(start + end) / 2];                while(left &lt;= right) &#123;            # 从左往右扫，直到找到一个不应该在左边的数            while(left &lt;= right &amp;&amp; A[left] &lt; pivot) &#123;                left++;            &#125;            # 从右往左扫，直到找到一个不应该在右边的数            while(left &lt;= right &amp;&amp; A[right] &gt; pivot) &#123;                right--;            &#125;            if(left &lt;= right) &#123;                int temp = A[left];                A[left] = A[right];                A[right] = temp;                left++;                right--;            &#125;        &#125;        # 到这里，说明两种情况        # [....] [.....]        # [...] num [....]   此时这个num已经在其w        quickSort(A, start, right);        quickSort(A, left, end);               &#125;        public void sortIntegers(int[] A) &#123;        if (A == null || A.length == 0) return;        quickSort(A, 0, A.length - 1)    &#125;&#125;    </code></pre><p><strong>重点1： 理解为什么是 left &lt;&#x3D; right， 而不是 &lt;</strong> </p><ol><li><p>首先保证程序的统一， while和if部分的 &lt;&#x3D; 或 &lt; 要保持一致，不能while写 &lt;&#x3D;, if又写 &lt;。要么全部 &lt;&#x3D;，要么全部 &lt; 。</p></li><li><p>如果while部分改成了 &lt; ，那么退出while的时候，left &#x3D;&#x3D; right，进入下一层递归时，就会出现quickSort(A, start, right), quickSort(A, left, end)的情况，也就是重合了，A[left]这个元素会参与两边的排序，出现了重复。如果是 &lt;&#x3D; 那么退出循环时，left &gt; right, 不会出现重复。</p></li><li><p>如果if部分改成了 &lt; ，那么上面的while退出时，left &#x3D;&#x3D; right，不进入if，直接进入下一层递归。</p><p>假设对[1,2]进行快排，那么pivot &#x3D; 1，最后A[left] &#x3D;&#x3D; 1，A[right] &#x3D;&#x3D; 1, left &#x3D;&#x3D; right，不进入if，直接下一层递归。其中quickSort(A, start, right) 中 start &#x3D;&#x3D; right，能正常退出。但是进入quickSort(A, , left， end)时，处理的还是[1,2]，这将会导致无限循环，栈会溢出。</p></li></ol><p><strong>重点2：理解为什么 A[left] &lt; pivot   A[right] &gt; pivot   而不是 &lt;&#x3D; 或 &gt;&#x3D;</strong> </p><p>​如果带了&#x3D;，遇到[1,1…,1,1]这种情况，那么left循环后会 &gt; right, 退出循环，转向下一层递归。但此时right都没动过，下层递归quickSort(A, start, right)遇到的还是[1,1…,1,1]，规模没有缩小，无限循环，栈溢出。</p><p><strong>总结：和基准值作比较，不带 &#x3D; ，流程控制结构带 &#x3D; （while、if）用 &lt;&#x3D;</strong></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据结构与算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 排序算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
   
   
 </search>
