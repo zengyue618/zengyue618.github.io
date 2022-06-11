@@ -92,6 +92,58 @@
                                 
                                 <li class="timeline-item">
                                     <div class="timeline-info">
+                                        <span class="gradient-text">June 11, 2022</span>
+                                    </div>
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <a class="timeline-title" target="_self" href="/2022/06/11/%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">快速选择学习笔记</a>
+                                        <p>
+                                            快速选择算法学习笔记找到第K小的数一：思想和快排的思想类似，先在中点找到一个基准值pivot，把 &lt;&#x3D; pivot的移到数组左边，把 &gt;&#x3D; pivot的移到右边。把数组分成两段，左边一段都是比较小的，右边一段都是比较大的。
+接下来，判断一下目标值在左边还是右边，如果在左边就去递归左边，右边就递归右边，递归中止条件是只有一个数。
+二： 代码实现public cl...
+                                        </p>
+                                    </div>
+                                </li>
+                            
+                                
+                                <li class="timeline-item">
+                                    <div class="timeline-info">
+                                        <span class="gradient-text">June 10, 2022</span>
+                                    </div>
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <a class="timeline-title" target="_self" href="/2022/06/10/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">归并排序学习笔记</a>
+                                        <p>
+                                            归并排序学习笔记一：思想把一个数组对半分，左右两边递归处理，直到区域只剩下一个元素。
+区域只剩下一个元素了，必然是有序的，接下来就是回溯递归栈，完成有序数组的合并。
+二：代码实现public class Solution &#123;
+    public void sortIntegers(int[] A) &#123;
+        if(A == null || A.length =...
+                                        </p>
+                                    </div>
+                                </li>
+                            
+                                
+                                <li class="timeline-item">
+                                    <div class="timeline-info">
+                                        <span class="gradient-text">June 10, 2022</span>
+                                    </div>
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <a class="timeline-title" target="_self" href="/2022/06/10/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">快速排序学习笔记</a>
+                                        <p>
+                                            快速排序学习笔记一：思想在数组中随机挑出一个数，作为基准值p。
+用一个分组函数将数组中**&lt;&#x3D;基准值p的元素挪到基准值的左半部分，**&gt;&#x3D; 基准值p的元素挪到右半部分。
+在左半部分和右半部分递归上述过程。
+重点：理解为什么是&lt;&#x3D;和&gt;&#x3D;，为什么取等
+答：因为当出现数组中很多元素都是一样的情况，举个极端例子[1,1,…..1,1]。...
+                                        </p>
+                                    </div>
+                                </li>
+                            
+                                
+                                <li class="timeline-item">
+                                    <div class="timeline-info">
                                         <span class="gradient-text">June 07, 2022</span>
                                     </div>
                                     <div class="timeline-marker"></div>
@@ -300,66 +352,6 @@ data.head(3)
                                             前言本次的案例源自于蚂蚁老师的爬虫课程。但由于博客园网站作了升级，所以蚂蚁老师的示例代码失效了，我根据蚂蚁老师教授的知识结合网上搜索来的资料，重新编写了一份代码，复现了蚂蚁老师在课程中的演示效果。
 需求下面我们来明确一下需求 爬取博客园前20页的文章标题、对应的文章链接以及对应的点赞数 如图所示  网站分页设置 
 查看网站的html代码整体分析通过浏览器内置的查看网络部分，我们发现了点击分页...
-                                        </p>
-                                    </div>
-                                </li>
-                            
-                                
-                                <li class="timeline-item period">
-                                    <div class="timeline-info"></div>
-                                    <div class="timeline-marker"></div>
-                                    <div class="timeline-content">
-                                        <h2 class="timeline-title">June 2021</h2>
-                                    </div>
-                                </li>
-                                
-                                <li class="timeline-item">
-                                    <div class="timeline-info">
-                                        <span class="gradient-text">June 11, 2021</span>
-                                    </div>
-                                    <div class="timeline-marker"></div>
-                                    <div class="timeline-content">
-                                        <a class="timeline-title" target="_self" href="/2021/06/11/%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">快速选择学习笔记</a>
-                                        <p>
-                                            快速选择算法学习笔记找到第K小的数一：思想和快排的思想类似，先在中点找到一个基准值pivot，把 &lt;&#x3D; pivot的移到数组左边，把 &gt;&#x3D; pivot的移到右边。把数组分成两段，左边一段都是比较小的，右边一段都是比较大的。
-接下来，判断一下目标值在左边还是右边，如果在左边就去递归左边，右边就递归右边，递归中止条件是只有一个数。
-二： 代码实现public cl...
-                                        </p>
-                                    </div>
-                                </li>
-                            
-                                
-                                <li class="timeline-item">
-                                    <div class="timeline-info">
-                                        <span class="gradient-text">June 10, 2021</span>
-                                    </div>
-                                    <div class="timeline-marker"></div>
-                                    <div class="timeline-content">
-                                        <a class="timeline-title" target="_self" href="/2021/06/10/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">归并排序学习笔记</a>
-                                        <p>
-                                            归并排序学习笔记一：思想把一个数组对半分，左右两边递归处理，直到区域只剩下一个元素。
-区域只剩下一个元素了，必然是有序的，接下来就是回溯递归栈，完成有序数组的合并。
-二：代码实现public class Solution &#123;
-    public void sortIntegers(int[] A) &#123;
-        if(A == null || A.length =...
-                                        </p>
-                                    </div>
-                                </li>
-                            
-                                
-                                <li class="timeline-item">
-                                    <div class="timeline-info">
-                                        <span class="gradient-text">June 10, 2021</span>
-                                    </div>
-                                    <div class="timeline-marker"></div>
-                                    <div class="timeline-content">
-                                        <a class="timeline-title" target="_self" href="/2021/06/10/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">快速排序学习笔记</a>
-                                        <p>
-                                            快速排序学习笔记一：思想在数组中随机挑出一个数，作为基准值p。
-用一个分组函数将数组中**&lt;&#x3D;基准值p的元素挪到基准值的左半部分，**&gt;&#x3D; 基准值p的元素挪到右半部分。
-在左半部分和右半部分递归上述过程。
-重点：理解为什么是&lt;&#x3D;和&gt;&#x3D;，为什么取等
-答：因为当出现数组中很多元素都是一样的情况，举个极端例子[1,1,…..1,1]。...
                                         </p>
                                     </div>
                                 </li>
