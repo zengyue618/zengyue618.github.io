@@ -1,0 +1,693 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>基于spark structured streaming的端到端实时流计算系统 - Hexo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="前言大三下学期，我开始学习大数据学科，时光荏苒，一学期马上就结束了，也迎来了Spark期末作业。于是就想用自己所学，搭建一套端到端的实时流处理系统。这个项目经过我精心设计，覆盖了我在这个学期中学习到,"> 
+    <meta name="author" content="Zeng Yue"> 
+    <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    
+    <script>var musiclist = "7471325035"</script>
+    
+<script src="/js/loadaplayer.js"></script>
+
+    <!-- 引用依赖 -->
+    
+<link rel="stylesheet" href="/aplayer/dist/APlayer.min.css">
+
+    
+<script src="/aplayer/dist/APlayer.min.js"></script>
+<script src="/js/Meting.min.js"></script>
+
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Hexo</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">基于spark structured streaming的端到端实时流计算系统</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url('https://s1.328888.xyz/2022/06/04/WIr9R.jpg') ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/大数据"><b>「
+                    </b>大数据<b> 」</b></a>
+                
+                June 29, 2022
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2022/06/29/%E5%9F%BA%E4%BA%8Espark%20structured%20streaming%E7%9A%84%E7%AB%AF%E5%88%B0%E7%AB%AF%E5%AE%9E%E6%97%B6%E6%B5%81%E8%AE%A1%E7%AE%97%E7%B3%BB%E7%BB%9F/" title="基于spark structured streaming的端到端实时流计算系统" class="">基于spark structured streaming的端到端实时流计算系统</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    16k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    14 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/spark/" rel="tag">spark</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大三下学期，我开始学习大数据学科，时光荏苒，一学期马上就结束了，也迎来了Spark期末作业。于是就想用自己所学，搭建一套端到端的实时流处理系统。这个项目经过我精心设计，覆盖了我在这个学期中学习到的许多大数据技术栈，包括hadoop、spark、flume、kafka、clickhouse、tableau等，作为本学期的收官之作。</p>
+<p>在此感谢郑志硕老师一学期以来的的辛勤工作，祝您<strong>工作顺利，身体健康，万事如意！</strong></p>
+<h1 id="项目演示"><a href="#项目演示" class="headerlink" title="项目演示"></a>项目演示</h1><p>做了一个项目演示视频放b站，视频外链b站做了限制，很模糊，可以去b站看</p>
+<iframe 
+        src="//player.bilibili.com/player.html?aid=855457073&bvid=BV1bL4y1w7bw&cid=759213961&page=1&high_quality=1&high_quality=1&danmaku=0" allowfullscreen="allowfullscreen" width="100%" height="500" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
+</iframe>
+# 项目架构
+
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>目前的实时流计算系统一般架构是这样的</p>
+<p><img src="https://s2.328888.xyz/2022/06/29/62bbe71b4e56d.jpg" alt="structured-streaming-kafka.jpg"></p>
+<p>流数据先进入kafka，再由流计算引擎spark structured streaming 或者 flink进行后续计算，将计算结果再次写回kafka中，重复这个过程，最后将计算结果写入后续的数据介质中。</p>
+<p>需要注意的是spark streaming已经淘汰</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbea8d3268f.png"><img src="https://s2.328888.xyz/2022/06/29/62bbea8d3268f.png" alt="ss原理.png"></a></p>
+<p>业界一般都用更为强大的spark structured streaming 或者 flink作为计算引擎。在本项目中的选择的是spark structured streaming。</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbea8d13881.png"><img src="https://s2.328888.xyz/2022/06/29/62bbea8d13881.png" alt="sss原理.png"></a></p>
+<h2 id="项目背景"><a href="#项目背景" class="headerlink" title="项目背景"></a>项目背景</h2><p>为使得项目贴近企业开发中的场景，我设定了一个业务场景：网上书城6.29购物节日，需要构建一个系统实时分析订单数据。</p>
+<p>此网上书店这个Web应用会源源不断地产生实时的交易订单数据，长这个样子。</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbec9a1151f.png"><img src="https://s2.328888.xyz/2022/06/29/62bbec9a1151f.png" alt="数据的样子.png"></a></p>
+<p>time字段是指订单的产生时间，id字段是下单的用户名，province是用户的下单地点，money是指订单金额，platform是指用户下单时使用的平台，category是指商品品类，ok字段是指订单付款成功与否，其中0，代表成功，1代表不成功。</p>
+<p>我们需要对此数据源实时计算，最终构建一个可视化大屏用以决策分析。</p>
+<h2 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h2><p>为了贴切企业实际生产过程，我调研了滴滴、去哪儿网、京东等互联网公司构建实时系统解决方案，结合我这个项目的业务背景，最终确定如下结构。</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbee6f47c14.png"><img src="https://s2.328888.xyz/2022/06/29/62bbee6f47c14.png" alt="项目架构.png"></a></p>
+<p>首先是数据生成：网上书城这个web应用源源不断地产生数据，将其写入特定的日志文件中。</p>
+<p>其次是数据采集：用flume这个日志采集模块，监控该日志文件，源源不断采集新数据到kafka中。</p>
+<p>然后是数据存储与计算：其实用数据仓库的理论角度去看的话，在实时流计算系统中，kafka承担了ODS层、DWD层、DWS层的存储任务，具体实现就是将这些层的数据存进不同的topic中，以供其它业务复用。这些层之间的数据计算任务就交由spark structured streaming去做。</p>
+<p>之后是数据分析：经过上面的步骤处理过后，数据已经可以直接分析使用了，这里我采用的是clickhouse这个OLAP数据库</p>
+<p>最后是可视化：使用成熟的BI系统，对接实时更新的OLAP的数据源，构建实时更新的数据大屏。</p>
+<h1 id="数据生成"><a href="#数据生成" class="headerlink" title="数据生成"></a>数据生成</h1><p>真实的场景中，应该是业务系统不断生成数据，通过http上报到日志服务器中。将上述逻辑抽取出来，我写了一个数据生成的程序，可以向日志文件中不断生成数据。它使用faker库生成随机数据，自己再添上商品种类，订单成功与否的信息，将它们都打包为json字符串，向日志文件中源源不断的写入数据，最后就可以达到上面订单数据的效果。</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbfaebf17d9.png"><img src="https://s2.328888.xyz/2022/06/29/62bbfaebf17d9.png" alt="安装faker.png"></a></p>
+<p>这是本项目所需的依赖库：kafka-python可以不要</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbfaeb35b91.png"><img src="https://s2.328888.xyz/2022/06/29/62bbfaeb35b91.png" alt="依赖库.png"></a></p>
+<p>生成数据代码如下，生成的速度可以通过延时代码控制。</p>
+<pre><code class="python">import json
+from faker import Faker
+import time
+from random import uniform
+
+fake = Faker(locale=&#39;zh_CN&#39;)
+
+
+def get_faker_log_data():
+    platforms = (&quot;Android-APP&quot;, &quot;IOS-APP&quot;, &quot;PC&quot;)
+    ok = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)
+
+    category = (
+        &quot;哲学&quot;, &quot;宗教&quot;, &quot;伦理&quot;, &quot;逻辑&quot;, &quot;美学&quot;, &quot;心理&quot;, &quot;语言&quot;, &quot;文学&quot;, &quot;政治&quot;,
+        &quot;经济&quot;, &quot;军事&quot;, &quot;法律&quot;, &quot;教育&quot;, &quot;体育&quot;, &quot;传媒&quot;, &quot;资讯&quot;, &quot;艺术&quot;,
+        &quot;管理&quot;, &quot;商贸&quot;, &quot;历史&quot;, &quot;考古&quot;, &quot;民族&quot;, &quot;生活&quot;, &quot;财金&quot;, &quot;统计&quot;, &quot;社会&quot;
+    )
+
+    return &#123;
+        &quot;time&quot;: int(time.time()),
+        &quot;id&quot;: fake.free_email(),
+        &quot;province&quot;: fake.province(),
+        &quot;money&quot;: fake.random_int(min=9, max=9999) + round(uniform(0, 1), 2),
+        &quot;category&quot;: category[fake.random_int(min=0, max=len(category) - 1)],
+        &quot;platform&quot;: platforms[fake.random_int(min=0, max=len(platforms) - 1)],
+        &quot;ok&quot;:  ok[fake.random_int(min=0, max=len(ok) - 1)]
+    &#125;
+
+
+if __name__ == &quot;__main__&quot;:
+    for _ in range(10000):
+        time.sleep(0.5)
+        with open(&quot;/PycharmProject/ZengYueFinalHomework/Generator/Log/LogData.log&quot;, &quot;a+&quot;, encoding=&#39;utf-8&#39;) as f:
+            data = get_faker_log_data()
+            json_data = json.dumps(data, ensure_ascii=False)
+            f.write(json_data + &quot;\n&quot;)
+            print(json_data)
+</code></pre>
+<h1 id="数据采集"><a href="#数据采集" class="headerlink" title="数据采集"></a>数据采集</h1><p>这个部分是Apache Flume完成的，它是一个高可用的分布式日志采集框架<a target="_blank" rel="noopener" href="https://flume.apache.org/index.html">Welcome to Apache Flume — Apache Flume</a></p>
+<p>只需要配置source、channel、sink的信息，不用写代码，就可以完成日志采集的工作</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbf4dcc2b97.png"><img src="https://s2.328888.xyz/2022/06/29/62bbf4dcc2b97.png" alt="flume.png"></a></p>
+<h2 id="编写file到kafka的flume配置文件"><a href="#编写file到kafka的flume配置文件" class="headerlink" title="编写file到kafka的flume配置文件"></a>编写file到kafka的flume配置文件</h2><pre><code class="shell"># agent的名称：a1
+
+# 指定sources、channels、sinks组件的名称
+a1.sources=r1
+a1.sinks=k1
+a1.channels=c1
+
+# 配置sources组件
+a1.sources.r1.type=exec
+a1.sources.r1.command=tail -F /PycharmProject/ZengYueFinalHomework/Generator/Log/LogData.log
+
+# 配置channels组件
+a1.channels.c1.type=file
+a1.channels.c1.checkpointDir=./chk
+a1.channels.c1.dataDirs=./data
+
+# 配置sinks组件
+a1.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
+a1.sinks.k1.kafka.topic=FakeLog
+a1.sinks.k1.kafka.bootstrap.servers=node1:9092,node2:9092,node3:9092
+a1.sinks.k1.kafka.flumeBatchSize=100
+a1.sinks.k1.kafka.producer.acks=1
+a1.sinks.k1.kafka.producer.linger.ms=1
+
+# 把组件连一块儿
+a1.sources.r1.channels=c1
+a1.sinks.k1.channel=c1
+</code></pre>
+<p>我们的目的是把日志文件经过flume输送到kafka，所以我们启动的顺序是先开kafka，再开flume。由于我的kafka依赖于zookeeper</p>
+<p>所以要先启动zookeeper。</p>
+<h2 id="启动zookeeper"><a href="#启动zookeeper" class="headerlink" title="启动zookeeper"></a>启动zookeeper</h2><p>在三台虚拟机中同时执行</p>
+<pre><code class="shell">cd /export/server/zookeeper/bin
+zkServer.sh start
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbf766ad90f.png"><img src="https://s2.328888.xyz/2022/06/29/62bbf766ad90f.png" alt="zk启动成功.png"></a></p>
+<p>三台机器中读出现此进程，代表启动成功，用客户端工具连接检查无误。</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbf7dc50dcc.png"><img src="https://s2.328888.xyz/2022/06/29/62bbf7dc50dcc.png" alt="zk集群连接成功.png"></a></p>
+<h2 id="启动kafka"><a href="#启动kafka" class="headerlink" title="启动kafka"></a>启动kafka</h2><p>针对kafka，我编写了一键启动脚本，在node1上输入如下命令</p>
+<pre><code class="shell">cd /export/onekey
+start-kafka.sh
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbf92b9b3a4.png"><img src="https://s2.328888.xyz/2022/06/29/62bbf92b9b3a4.png" alt="启动kafka.png"></a></p>
+<p>kafka启动成功。</p>
+<h2 id="启动kafka-eagle"><a href="#启动kafka-eagle" class="headerlink" title="启动kafka-eagle"></a>启动kafka-eagle</h2><p>为方便对kafka进行可视化的管理，就开始这个东西，它是基于web的一个kafka客户端，非常方便</p>
+<pre><code class="shell">cd /export/server/kafka-eagle/bin
+ke.sh start
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbfa623efab.png"><img src="https://s2.328888.xyz/2022/06/29/62bbfa623efab.png" alt="启动kafka监控.png"></a></p>
+<p>登录监控页面</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbfa619e8a2.png"><img src="https://s2.328888.xyz/2022/06/29/62bbfa619e8a2.png" alt="登录监控.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbfaeb68512.png"><img src="https://s2.328888.xyz/2022/06/29/62bbfaeb68512.png" alt="监控页面.png"></a></p>
+<p>创建Topic，这个topic就作为ODS层</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbfc35e54b0.png"><img src="https://s2.328888.xyz/2022/06/29/62bbfc35e54b0.png" alt="创建topic.png"></a></p>
+<h2 id="启动flume"><a href="#启动flume" class="headerlink" title="启动flume"></a>启动flume</h2><p>启动flume之前要用到hdfs，后续的计算引擎也要依赖yarn，所以先开启hadoop</p>
+<pre><code class="shell">start-all.sh
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbf8e1924dc.png"><img src="https://s2.328888.xyz/2022/06/29/62bbf8e1924dc.png" alt="启动hadoop.png"></a></p>
+<p>开启flume前的必备进程</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbfcd742b59.png"><img src="https://s2.328888.xyz/2022/06/29/62bbfcd742b59.png" alt="所需的进程.png"></a></p>
+<p>确定无误后，开启flume</p>
+<pre><code class="shell">bin/flume-ng agent -c ./conf -f ./conf/access-kafka.conf -n a1 -Dflume.root.logger=ERROR,console
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bbf76ff242f.png"><img src="https://s2.328888.xyz/2022/06/29/62bbf76ff242f.png" alt="flume启动成功.png"></a></p>
+<p>看到上面的提示，就说明启动成功！</p>
+<h1 id="数据的存储与计算"><a href="#数据的存储与计算" class="headerlink" title="数据的存储与计算"></a>数据的存储与计算</h1><p>刚才已经在kafka中建立了FakeLog这个topic作为数据的ODS层，接下来再建立LogComputed这个topic，作为DWS层，因为我们的数据结构很简单，不需要经过太复杂的计算，所以就不需要DWD层了。整个数仓结构就是ODS层（FakeLog）、DWS层（LogComputed）以及后续再Clickhouse中的APP层。</p>
+<h2 id="spark-structured-streaming"><a href="#spark-structured-streaming" class="headerlink" title="spark structured streaming"></a>spark structured streaming</h2><p>接下来就是最重要的计算引擎部分，在企业生产过程中，它将承担起复杂的数据计算任务，与kafka、redis反复交互。</p>
+<p>在这个项目的业务需求很简单，它的作用就是从kafka的FakeLog中取出数据，把数据中的订单支付不成功的过滤掉，把数据中的时间戳转化为日期格式，最终写入kafka的LogComputed中，来看看代码。</p>
+<pre><code class="python">from pyspark.sql import SparkSession
+import os
+from pyspark.sql.functions import from_json, to_json, struct, from_unixtime
+from pyspark.sql.types import StructType, StringType, IntegerType, LongType, DecimalType
+
+if __name__ == &quot;__main__&quot;:
+    os.environ[&quot;JAVA_HOME&quot;] = &quot;/export/server/jdk1.8.0_241&quot;
+    spark = SparkSession.builder \
+        .appName(&quot;StructuredKafkaTest&quot;) \
+        .getOrCreate()
+
+    df = spark \
+        .readStream \
+        .format(&quot;kafka&quot;) \
+        .option(&quot;kafka.bootstrap.servers&quot;, &quot;node1:9092&quot;) \
+        .option(&quot;subscribe&quot;, &quot;FakeLog&quot;) \
+        .load()
+
+    schema = StructType() \
+        .add(&quot;time&quot;, LongType()) \
+        .add(&quot;id&quot;, StringType()) \
+        .add(&quot;province&quot;, StringType()) \
+        .add(&quot;money&quot;, DecimalType()) \
+        .add(&quot;category&quot;, StringType()) \
+        .add(&quot;platform&quot;, StringType()) \
+        .add(&quot;ok&quot;, IntegerType())
+
+    # kafka中拿过来的value数据是字节类型，要转换为字符串类型
+    df_toString = df.selectExpr(&quot;CAST(value AS STRING) as value&quot;)
+
+    # 解析完成后就是json字符串，用from_json解析json字符串
+    df_parsed = df_toString.withColumn(&quot;value&quot;, from_json(&quot;value&quot;, schema))
+
+    # 取出所有value下的字段
+    df_values = df_parsed.select(&quot;value.*&quot;)
+
+    # 进行数据清洗：把时间戳转为日期、过滤未成功订单
+    # 之后取出有用的属性打包为value字段，准备发往kafka
+    df_computed = df_values.withColumn(&quot;time&quot;, from_unixtime(&quot;time&quot;, &quot;yyyy-MM-dd HH:mm:ss&quot;)).filter(&quot;ok == 1&quot;) \
+        .select(to_json(struct(&quot;time&quot;, &quot;province&quot;, &quot;money&quot;, &quot;category&quot;, &quot;platform&quot;)).alias(&quot;value&quot;))
+
+    df_computed.writeStream \
+        .format(&quot;kafka&quot;) \
+        .option(&quot;kafka.bootstrap.servers&quot;, &quot;node1:9092&quot;) \
+        .option(&quot;topic&quot;, &quot;LogComputed&quot;) \
+        .option(&quot;checkpointLocation&quot;, &quot;kafka-ckp&quot;) \
+        .start() \
+        .awaitTermination()
+</code></pre>
+<p>运行此程序，再运行刚才的日志生成程序，就可以看到计算后的数据被源源不断写入FakeLog与LogComputed主题中。</p>
+<p>用kafka SQL分别看看这些数据吧~</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bc0315c3758.png"><img src="https://s2.328888.xyz/2022/06/29/62bc0315c3758.png" alt="kafka数据.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bc0315c0b3e.png"><img src="https://s2.328888.xyz/2022/06/29/62bc0315c0b3e.png" alt="kafka中的数据2.png"></a></p>
+<p>数据正常，说明spark程序没问题。</p>
+<h1 id="数据的分析"><a href="#数据的分析" class="headerlink" title="数据的分析"></a>数据的分析</h1><p>kafka中的LogComputed就是处理完成可以用于分析的数据了，一般会将其导入OLAP引擎中，传统的方案是Hbase，但在实时流计算系统中太慢了，目前有Apache Kylin、Apache Doris、Clickhouse等可选。Clickhouse是俄罗斯开源的OLAP数据库它性能强劲，对CPU的性能压榨到极致，目前许多企业都在用，它能很好地支持kafka中的数据源并且与下游的BI系统也有良好的生态支持，所以我在项目中选择了它。</p>
+<p>clickhouse引入kafka数据是通过clickhouse的kafka引擎表和物化视图来配合完成的，此时clickhouse就相对于kafka的消费者。</p>
+<p>在clickhouse，我们只选取了time、province、money、category、platform这5个字段。</p>
+<h2 id="建立目标表"><a href="#建立目标表" class="headerlink" title="建立目标表"></a>建立目标表</h2><p>kafka过来的数据最终就到这里</p>
+<pre><code class="sql">-- auto-generated definition
+create table target
+(
+    time     DateTime64(3),
+    province Nullable(String),
+    money    Decimal(9, 3),
+    category Nullable(String),
+    platform Nullable(String)
+)
+    engine = MergeTree PARTITION BY toYYYYMM(time)
+        ORDER BY money
+        SETTINGS index_granularity = 8192;
+</code></pre>
+<h2 id="建立kafka引擎表"><a href="#建立kafka引擎表" class="headerlink" title="建立kafka引擎表"></a>建立kafka引擎表</h2><p>kafka的数据就是通过这张表源源不断抽取过来的</p>
+<pre><code class="sql">-- auto-generated definition
+create table queue
+(
+    time     DateTime64(3),
+    province Nullable(String),
+    money    Decimal(9, 3),
+    category Nullable(String),
+    platform Nullable(String)
+)
+    engine = Kafka SETTINGS kafka_broker_list = &#39;node1:9092&#39;, kafka_topic_list = &#39;LogComputed&#39;, kafka_group_name = &#39;clickhouse&#39;, kafka_format = &#39;JSONEachRow&#39;;
+</code></pre>
+<h2 id="建立物化视图"><a href="#建立物化视图" class="headerlink" title="建立物化视图"></a>建立物化视图</h2><p>如果没有物化视图，那么target表中的数据被读一次后就会被自动删除，要用物化视图固定下来</p>
+<pre><code class="sql">-- auto-generated definition
+create materialized view consumer To target as
+select * from queue;
+</code></pre>
+<p>建立好了这仨后，启动spark程序，启动数据生成程序，就可以发现target表中，源源不断有数据添加进来。</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bc09a344609.png"><img src="https://s2.328888.xyz/2022/06/29/62bc09a344609.png" alt="clickhouse中的数据.png"></a></p>
+<h1 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a>数据可视化</h1><h2 id="连接clickhouse"><a href="#连接clickhouse" class="headerlink" title="连接clickhouse"></a>连接clickhouse</h2><p>在大二下学期的时候，我学习了BI软件tableau，它可以支持丰富的数据源，也包括clickhouse</p>
+<p>tableau连接clickhouse是通过ODBC的方式连接的，所以先要下载安装clickhouse的ODBC驱动程序才行。</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bc0bb60ced2.png"><img src="https://s2.328888.xyz/2022/06/29/62bc0bb60ced2.png" alt="ckODBC.png"></a></p>
+<p>连接上后，设置实时，就可以更新数据了</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bc0c8e4dd79.png"><img src="https://s2.328888.xyz/2022/06/29/62bc0c8e4dd79.png" alt="ck连接tableau.png"></a></p>
+<h2 id="绘制图像"><a href="#绘制图像" class="headerlink" title="绘制图像"></a>绘制图像</h2><p>选取相关字段，分别绘制</p>
+<p>各省市销售额汇总、各平台订单销售情况、各品类销售额汇总、各品类销售额占比、各品类订单数占比、各平台销售占比、各平台订单占比、总订单和总金额，这九张图，把这九张图摆在一块，构成一个仪表板。</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bc0fa344f39.png"><img src="https://s2.328888.xyz/2022/06/29/62bc0fa344f39.png" alt="tableau图.png"></a></p>
+<p>在数据源中更新数据，就可以发现仪表板中的图像在变化</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bc115f1bb5c.png"><img src="https://s2.328888.xyz/2022/06/29/62bc115f1bb5c.png" alt="更新数据源.png"></a></p>
+<h2 id="提取数据"><a href="#提取数据" class="headerlink" title="提取数据"></a>提取数据</h2><p>把先有的数据通过tableau的数据提取功能提取出来，然后把我的作品上传到云端，这样就可以在线访问啦！</p>
+<p><a target="_blank" rel="noopener" href="https://s2.328888.xyz/2022/06/29/62bc130c68412.png"><img src="https://s2.328888.xyz/2022/06/29/62bc130c68412.png" alt="在线仪表板.png"></a></p>
+<p>点击下方连接，就可以与我一起洞察数据</p>
+<p><a target="_blank" rel="noopener" href="https://public.tableau.com/app/profile/.48701339/viz/6_29spark/6_29?publish=yes">6.29图书交易实时大屏（spark期末作业） | Tableau Public</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/GrantEtude.mp3'></li>
+                
+                    
+            </ul>
+            
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d=''
+        data-p='https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://s1.328888.xyz/2022/06/04/W7Vg3.jpg" height=300 width=300></img>
+                    <p>曾粤</p>
+                    <span>I think,therefore I am</span>
+                    <dl>
+                        
+                        
+                            
+                                <dd>
+                                    <link rel="stylesheet" type="text/css" href="">
+                                    <a href="function link() { [native code] }" target="_blank"><span
+                                    class=" iconfont "></span></a>
+                                </dd>
+                            
+                            
+                            
+                        
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">17 <p>Articles</p></a></li>
+                    <li><a href="/categories">9 <p>Categories</p></a></li>
+                    <li><a href="/tags">13 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%BC%94%E7%A4%BA"><span class="toc-number">2.</span> <span class="toc-text">项目演示</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-number">2.1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF"><span class="toc-number">2.2.</span> <span class="toc-text">项目背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E5%9E%8B"><span class="toc-number">2.3.</span> <span class="toc-text">选型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90"><span class="toc-number">3.</span> <span class="toc-text">数据生成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86"><span class="toc-number">4.</span> <span class="toc-text">数据采集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99file%E5%88%B0kafka%E7%9A%84flume%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">4.1.</span> <span class="toc-text">编写file到kafka的flume配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8zookeeper"><span class="toc-number">4.2.</span> <span class="toc-text">启动zookeeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8kafka"><span class="toc-number">4.3.</span> <span class="toc-text">启动kafka</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8kafka-eagle"><span class="toc-number">4.4.</span> <span class="toc-text">启动kafka-eagle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8flume"><span class="toc-number">4.5.</span> <span class="toc-text">启动flume</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AD%98%E5%82%A8%E4%B8%8E%E8%AE%A1%E7%AE%97"><span class="toc-number">5.</span> <span class="toc-text">数据的存储与计算</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#spark-structured-streaming"><span class="toc-number">5.1.</span> <span class="toc-text">spark structured streaming</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%86%E6%9E%90"><span class="toc-number">6.</span> <span class="toc-text">数据的分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E7%9B%AE%E6%A0%87%E8%A1%A8"><span class="toc-number">6.1.</span> <span class="toc-text">建立目标表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8Bkafka%E5%BC%95%E6%93%8E%E8%A1%A8"><span class="toc-number">6.2.</span> <span class="toc-text">建立kafka引擎表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E7%89%A9%E5%8C%96%E8%A7%86%E5%9B%BE"><span class="toc-number">6.3.</span> <span class="toc-text">建立物化视图</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="toc-number">7.</span> <span class="toc-text">数据可视化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5clickhouse"><span class="toc-number">7.1.</span> <span class="toc-text">连接clickhouse</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E5%9B%BE%E5%83%8F"><span class="toc-number">7.2.</span> <span class="toc-text">绘制图像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="toc-number">7.3.</span> <span class="toc-text">提取数据</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2022
+        <span class="gradient-text">
+            Zeng Yue
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.9.3" target="_blank" rel="noopener">v1.4.9.3</a></small>
+        
+        
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['勇俭爱诚', '厚德博学，唯实求新'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+<!-- 引用依赖 -->
+<script>document.write(aplayerconf)</script>
+
+
+
+
+</html>
